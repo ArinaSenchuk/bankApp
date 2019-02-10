@@ -11,8 +11,63 @@
             <column name="id" type="bigint">
                 <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
-            <column name="username" type="varchar(55)">
+            <column name="lastname" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronic" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <!--какой тип-->
+            <column name="date_of_bd" type="Date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sex" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="passport_series" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="passport_number" type="varchar(55)">
                 <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="issued_by" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identification_number" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="place_of_birth" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(55)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="family_status" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nationality" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="disability" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revenue" type="varchar(55)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_retiree" type="varchar(55)">
+                <constraints/>
+            </column>
+            <column name="email" type="varchar(55)">
+                <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -21,24 +76,5 @@
         <addAutoIncrement tableName="users" columnName="id" columnDataType="bigint"/>
     </changeSet>
 
-    <changeSet id="ADD_PROFILE_TABLE" author="com.senchuk">
-        <createTable tableName="profiles">
-            <column name="id" type="bigint">
-                <constraints nullable="false" unique="true" primaryKey="true"/>
-            </column>
-            <column name="username" type="varchar(55)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="email" type="varchar(55)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="age" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addAutoIncrement tableName="profiles" columnName="id" columnDataType="bigint"/>
-    </changeSet>
+
 </databaseChangeLog>
