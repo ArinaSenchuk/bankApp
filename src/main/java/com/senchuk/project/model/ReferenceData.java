@@ -1,5 +1,6 @@
 package com.senchuk.project.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,21 +14,18 @@ import javax.persistence.Table;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "users")
+@Table(name = "reference_data")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class ReferenceData {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    private long profile_id;
-
-    private String login;
-    private String email;
-    private String password;
-
+    private String label;
+    private String code;
+    private String definition;
 }

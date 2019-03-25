@@ -6,8 +6,135 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="ADD_USERS_TABLE" author="com.senchuk">
-        <createTable tableName="users">
+    <changeSet id="ADD_REFERENCE-DATA_TABLE" author="com.senchuk">
+        <createTable tableName="reference_data">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="label" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="definition" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addAutoIncrement tableName="reference_data" columnName="id" columnDataType="bigint"/>
+
+    </changeSet>
+
+    <changeSet id="reference_data_insert" author="com.senchuk">
+                    <!--sex-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Мужчина"/>
+            <column  name="code" value="MALE"/>
+            <column  name="definition" value="sex"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Женщина"/>
+            <column  name="code" value="FEMALE"/>
+            <column  name="definition" value="sex"/>
+        </insert>
+
+                    <!--city-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Минск"/>
+            <column  name="code" value="MINSK"/>
+            <column  name="definition" value="city"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Брест"/>
+            <column  name="code" value="BREST"/>
+            <column  name="definition" value="city"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Витебск"/>
+            <column  name="code" value="VITEBSK"/>
+            <column  name="definition" value="city"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Гомель"/>
+            <column  name="code" value="GOMEL"/>
+            <column  name="definition" value="city"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Гродно"/>
+            <column  name="code" value="GRODNO"/>
+            <column  name="definition" value="city"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Могилев"/>
+            <column  name="code" value="MOGILEV"/>
+            <column  name="definition" value="city"/>
+        </insert>
+
+                    <!--status-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Женат/Замужем"/>
+            <column  name="code" value="MARRIED"/>
+            <column  name="definition" value="status"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Не женат/Не замужем"/>
+            <column  name="code" value="NOT_MARRIED"/>
+            <column  name="definition" value="status"/>
+        </insert>
+
+                    <!--nationality-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Беларус"/>
+            <column  name="code" value="BELARUSIAN"/>
+            <column  name="definition" value="nationality"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Украинец"/>
+            <column  name="code" value="UKRAINIAN"/>
+            <column  name="definition" value="nationality"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Поляк"/>
+            <column  name="code" value="POLE"/>
+            <column  name="definition" value="nationality"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Латыш"/>
+            <column  name="code" value="LATVIAN"/>
+            <column  name="definition" value="nationality"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Литовец"/>
+            <column  name="code" value="LITHUANIAN"/>
+            <column  name="definition" value="nationality"/>
+        </insert>
+
+                    <!--disability-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Отсутствует"/>
+            <column  name="code" value="NO_DISABILITY"/>
+            <column  name="definition" value="disability"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="1 группа"/>
+            <column  name="code" value="1_DISABILITY"/>
+            <column  name="definition" value="disability"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="2 группа"/>
+            <column  name="code" value="2_DISABILITY"/>
+            <column  name="definition" value="disability"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="3 группа"/>
+            <column  name="code" value="3_DISABILITY"/>
+            <column  name="definition" value="disability"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ADD_PROFILES_TABLE" author="com.senchuk">
+        <createTable tableName="profiles">
             <column name="id" type="bigint">
                 <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
@@ -20,11 +147,10 @@
             <column name="patronic" type="varchar(55)">
                 <constraints nullable="false"/>
             </column>
-            <!--какой тип-->
             <column name="date_of_bd" type="Date">
                 <constraints nullable="false"/>
             </column>
-            <column name="sex" type="varchar(55)">
+            <column name="sex_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="passport_series" type="varchar(55)">
@@ -42,8 +168,8 @@
             <column name="place_of_birth" type="varchar(55)">
                 <constraints nullable="false"/>
             </column>
-            <column name="city" type="varchar(55)">
-                <constraints nullable="false"/>
+            <column name="city_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <column name="address" type="varchar(55)">
                 <constraints nullable="false"/>
@@ -51,13 +177,13 @@
             <column name="phone_number" type="varchar(55)">
                 <constraints nullable="true"/>
             </column>
-            <column name="family_status" type="varchar(55)">
+            <column name="family_status_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="nationality" type="varchar(55)">
+            <column name="nationality_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="disability" type="varchar(55)">
+            <column name="disability_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="revenue" type="varchar(55)">
@@ -66,15 +192,220 @@
             <column name="is_retiree" type="varchar(55)">
                 <constraints/>
             </column>
+        </createTable>
+
+        <addAutoIncrement tableName="profiles" columnName="id" columnDataType="bigint"/>
+
+        <addForeignKeyConstraint baseTableName="profiles"
+                                 baseColumnNames="sex_id"
+                                 constraintName="fk_profileSex_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="profiles"
+                                 baseColumnNames="city_id"
+                                 constraintName="fk_profileCity_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="profiles"
+                                 baseColumnNames="family_status_id"
+                                 constraintName="fk_profileStatus_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="profiles"
+                                 baseColumnNames="nationality_id"
+                                 constraintName="fk_profileNat_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="profiles"
+                                 baseColumnNames="disability_id"
+                                 constraintName="fk_profileDis_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+
+    <changeSet id="ADD_USERS_TABLE" author="com.senchuk">
+        <createTable tableName="users">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(55)">
+                <constraints unique="true" nullable="false"/>
+            </column>
             <column name="email" type="varchar(55)">
-                <constraints nullable="false"/>
+                <constraints unique="true" nullable="false"/>
             </column>
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="profile_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="profile_id"
+                                 constraintName="fk_profile_user"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
         <addAutoIncrement tableName="users" columnName="id" columnDataType="bigint"/>
     </changeSet>
 
+    <changeSet id="User_Profile_insert" author="com.senchuk">
 
+        <insert tableName="profiles" >
+            <column  name="id" value="1"/>
+            <column  name="lastname" value="Сенчук"/>
+            <column  name="firstname" value="Арина"/>
+            <column  name="patronic" value="Юрьевна"/>
+            <column  name="date_of_bd" value="1998-11-01"/>
+            <column  name="sex_id" value="2"/>
+            <column  name="passport_series" value="mp"/>
+            <column  name="passport_number" value="1228066"/>
+            <column  name="issued_by" value="Московское РУВД"/>
+            <column  name="identification_number" value="824ad6703n1224"/>
+            <column  name="place_of_birth" value="Минск"/>
+            <column  name="city_id" value="3"/>
+            <column  name="address" value="улица Есенина 57-18"/>
+            <column  name="phone_number" value="+375-44-794-3974"/>
+            <column  name="family_status_id" value="10"/>
+            <column  name="nationality_id" value="11"/>
+            <column  name="disability_id" value="16"/>
+            <!--<column  name="revenue" value=""/>-->
+            <column  name="is_retiree" value="false"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="email" value="arina.senchuk@gmail.com"/>
+            <column name="login" value="arina"/>
+            <column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>
+            <column name="profile_id" value="1"/>
+        </insert>
+
+
+        <insert tableName="profiles" >
+            <column  name="id" value="2"/>
+            <column  name="lastname" value="Шандроха"/>
+            <column  name="firstname" value="Анна"/>
+            <column  name="patronic" value="Андреевна"/>
+            <column  name="date_of_bd" value="1999-02-26"/>
+            <column  name="sex_id" value="2"/>
+            <column  name="passport_series" value="mp"/>
+            <column  name="passport_number" value="3428066"/>
+            <column  name="issued_by" value="Первомайское РУВД"/>
+            <column  name="identification_number" value="824nd6781p9924"/>
+            <column  name="place_of_birth" value="Минск"/>
+            <column  name="city_id" value="3"/>
+            <column  name="address" value="улица Ложенская 26-9"/>
+            <column  name="phone_number" value="+375-29-674-3974"/>
+            <column  name="family_status_id" value="10"/>
+            <column  name="nationality_id" value="11"/>
+            <column  name="disability_id" value="16"/>
+            <column  name="revenue" value="1000"/>
+            <column  name="is_retiree" value="false"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2"/>
+            <column name="email" value="shandroha@gmail.com"/>
+            <column name="login" value="ann"/>
+            <column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>
+            <column name="profile_id" value="2"/>
+        </insert>
+    </changeSet>
+    <!--<changeSet id="User_Profile_insert_2" author="com.senchuk">-->
+        <!--<insert tableName="profiles" >-->
+            <!--<column  name="id" value="3"/>-->
+            <!--<column  name="lastname" value="Иванов"/>-->
+            <!--<column  name="firstname" value="Иван"/>-->
+            <!--<column  name="patronic" value="Иванович"/>-->
+            <!--<column  name="date_of_bd" value="1990-04-20"/>-->
+            <!--<column  name="sex_id" value="1"/>-->
+            <!--<column  name="passport_series" value="mp"/>-->
+            <!--<column  name="passport_number" value="9508066"/>-->
+            <!--<column  name="issued_by" value="Правительство города Львов"/>-->
+            <!--<column  name="identification_number" value="824ad6703n1224"/>-->
+            <!--<column  name="place_of_birth" value="Львов"/>-->
+            <!--<column  name="city_id" value="5"/>-->
+            <!--<column  name="address" value="улица Гагарина 106-3"/>-->
+            <!--<column  name="phone_number" value="+375-33-667-3556"/>-->
+            <!--<column  name="family_status_id" value="9"/>-->
+            <!--<column  name="nationality_id" value="12"/>-->
+            <!--<column  name="disability_id" value="16"/>-->
+            <!--&lt;!&ndash;<column  name="revenue" value=""/>&ndash;&gt;-->
+            <!--<column  name="is_retiree" value="false"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="users">-->
+            <!--<column name="id" value="3"/>-->
+            <!--<column name="email" value="ivanov.i@gmail.com"/>-->
+            <!--<column name="login" value="ivanovIvan"/>-->
+            <!--<column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>-->
+            <!--<column name="profile_id" value="3"/>-->
+        <!--</insert>-->
+
+
+        <!--<insert tableName="profiles" >-->
+            <!--<column  name="id" value="4"/>-->
+            <!--<column  name="lastname" value="Сидоров"/>-->
+            <!--<column  name="firstname" value="Павел"/>-->
+            <!--<column  name="patronic" value="Валентинович"/>-->
+            <!--<column  name="date_of_bd" value="1955-12-16"/>-->
+            <!--<column  name="sex_id" value="1"/>-->
+            <!--<column  name="passport_series" value="mp"/>-->
+            <!--<column  name="passport_number" value="3407066"/>-->
+            <!--<column  name="issued_by" value="Октябрьское РУВД"/>-->
+            <!--<column  name="identification_number" value="874av6728m9224"/>-->
+            <!--<column  name="place_of_birth" value="Брест"/>-->
+            <!--<column  name="city_id" value="4"/>-->
+            <!--<column  name="address" value="улица Громова 50-290"/>-->
+            <!--<column  name="phone_number" value="+375-44-745-0023"/>-->
+            <!--<column  name="family_status_id" value="10"/>-->
+            <!--<column  name="nationality_id" value="11"/>-->
+            <!--<column  name="disability_id" value="18"/>-->
+            <!--<column  name="revenue" value="300"/>-->
+            <!--<column  name="is_retiree" value="true"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="users">-->
+            <!--<column name="id" value="4"/>-->
+            <!--<column name="email" value="sudorov@gmail.com"/>-->
+            <!--<column name="login" value="sudorov"/>-->
+            <!--<column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>-->
+            <!--<column name="profile_id" value="4"/>-->
+        <!--</insert>-->
+
+    <!--</changeSet>-->
+    <!--<changeSet id="User_Profile_insert_3" author="com.senchuk">-->
+        <!--<insert tableName="profiles" >-->
+            <!--<column  name="id" value="5"/>-->
+            <!--<column  name="lastname" value="Лаврова"/>-->
+            <!--<column  name="firstname" value="Инна"/>-->
+            <!--<column  name="patronic" value="Дмитриевна"/>-->
+            <!--<column  name="date_of_bd" value="1995-10-06"/>-->
+            <!--<column  name="sex_id" value="2"/>-->
+            <!--<column  name="passport_series" value="mp"/>-->
+            <!--<column  name="passport_number" value="1200396"/>-->
+            <!--<column  name="issued_by" value="Заводское РУВД"/>-->
+            <!--<column  name="identification_number" value="825ld6008d1224"/>-->
+            <!--<column  name="place_of_birth" value="Витебск"/>-->
+            <!--<column  name="city_id" value="6"/>-->
+            <!--<column  name="address" value="поселок Солнечная поляна, 30"/>-->
+            <!--<column  name="phone_number" value="+375-33-197-4582"/>-->
+            <!--<column  name="family_status_id" value="9"/>-->
+            <!--<column  name="nationality_id" value="11"/>-->
+            <!--<column  name="disability_id" value="17"/>-->
+            <!--<column  name="revenue" value="579"/>-->
+            <!--<column  name="is_retiree" value="false"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="users">-->
+            <!--<column name="id" value="5"/>-->
+            <!--<column name="email" value="i_lavrova@gmail.com"/>-->
+            <!--<column name="login" value="lavrova"/>-->
+            <!--<column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>-->
+            <!--<column name="profile_id" value="5"/>-->
+        <!--</insert>-->
+
+    <!--</changeSet>-->
 </databaseChangeLog>
