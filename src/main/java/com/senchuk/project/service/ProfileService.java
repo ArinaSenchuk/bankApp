@@ -6,5 +6,7 @@ public interface ProfileService {
 
     Profile saveProfile(Profile profile);
 
+    Profile saveProfileChanges(Profile profile);
+
     Profile getProfile();
 }

@@ -7,7 +7,9 @@ import com.senchuk.project.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service(value="profileService")
+import java.util.List;
+
+@Service(value = "profileService")
 public class ProfileServiceImpl implements ProfileService {
 
     @Autowired
@@ -21,12 +23,20 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Profile saveProfile(Profile profile) {
-        if (profileRepository.isExists(profile.getIdentificationNumber(), profile.getPassportNumber())==null) {
+        if (profileRepository.isExists(profile.getIdentificationNumber(), profile.getPassportNumber()).isEmpty()) {
             return profileRepository.save(profile);
-        }
-        else throw new IllegalStateException("User with this identification number or passport number is already exist");
+        } else
+            throw new IllegalStateException("User with this identification number or passport number is already exist");
     }
 
+    @Override
+    public Profile saveProfileChanges(Profile profile) {
+        List<Long> ids = profileRepository.isExists(profile.getIdentificationNumber(), profile.getPassportNumber());
+        if (ids.size() == 0 || (ids.size() < 2 && ids.contains(profile.getId()))) {
+            return profileRepository.save(profile);
+        } else
+            throw new IllegalStateException("User with this identification number or passport number is already exist");
+    }
 
     @Override
     public Profile getProfile() {

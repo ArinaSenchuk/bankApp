@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OptionDto {
+public class ProfileOptionDto {
 
     private List<ReferenceData> sex;
     private List<ReferenceData> city;

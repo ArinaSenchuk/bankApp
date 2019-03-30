@@ -27,7 +27,7 @@
     </changeSet>
 
     <changeSet id="reference_data_insert" author="com.senchuk">
-                    <!--sex-->
+                    <!--profile - sex-->
         <insert tableName="reference_data" >
             <column  name="label" value="Мужчина"/>
             <column  name="code" value="MALE"/>
@@ -39,7 +39,7 @@
             <column  name="definition" value="sex"/>
         </insert>
 
-                    <!--city-->
+                    <!--profile - city-->
         <insert tableName="reference_data" >
             <column  name="label" value="Минск"/>
             <column  name="code" value="MINSK"/>
@@ -71,7 +71,7 @@
             <column  name="definition" value="city"/>
         </insert>
 
-                    <!--status-->
+                    <!--profile - status-->
         <insert tableName="reference_data" >
             <column  name="label" value="Женат/Замужем"/>
             <column  name="code" value="MARRIED"/>
@@ -83,7 +83,7 @@
             <column  name="definition" value="status"/>
         </insert>
 
-                    <!--nationality-->
+                    <!--profile - nationality-->
         <insert tableName="reference_data" >
             <column  name="label" value="Беларус"/>
             <column  name="code" value="BELARUSIAN"/>
@@ -110,7 +110,7 @@
             <column  name="definition" value="nationality"/>
         </insert>
 
-                    <!--disability-->
+                    <!--profile - disability-->
         <insert tableName="reference_data" >
             <column  name="label" value="Отсутствует"/>
             <column  name="code" value="NO_DISABILITY"/>
@@ -131,6 +131,48 @@
             <column  name="code" value="3_DISABILITY"/>
             <column  name="definition" value="disability"/>
         </insert>
+
+                    <!--deposit - deposit type-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Депозитный вклад до востребования"/>
+            <column  name="code" value="DEPOSIT_TO_REQUEST"/>
+            <column  name="definition" value="depositType"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Депозитный срочный вклад с выплатой процентов"/>
+            <column  name="code" value="URGENT_DEPOSIT"/>
+            <column  name="definition" value="depositType"/>
+        </insert>
+
+                    <!--deposit - currency type-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Национальная валюта"/>
+            <column  name="code" value="NATIONAL_CURRENCY"/>
+            <column  name="definition" value="currencyType"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Иностранная валюта"/>
+            <column  name="code" value="FOREIGN_CURRENCY"/>
+            <column  name="definition" value="currencyType"/>
+        </insert>
+
+                    <!--deposit - deposit term-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="3 месяца"/>
+            <column  name="code" value="3_MONTH"/>
+            <column  name="definition" value="depositTerm"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="9 месяцев"/>
+            <column  name="code" value="9_MONTH"/>
+            <column  name="definition" value="depositTerm"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="18 месяцев"/>
+            <column  name="code" value="18_MONTH"/>
+            <column  name="definition" value="depositTerm"/>
+        </insert>
+
     </changeSet>
 
     <changeSet id="ADD_PROFILES_TABLE" author="com.senchuk">
@@ -408,4 +450,204 @@
         <!--</insert>-->
 
     <!--</changeSet>-->
+
+    <changeSet id="ADD_DEPOSIT_TABLE" author="com.senchuk">
+        <createTable tableName="deposits">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="deposit_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_of_contract" type="varchar(125)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_of_deposit_start" type="Date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deposit_term_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deposit_amount" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="profile_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="deposits" columnName="id" columnDataType="bigint"/>
+
+        <addForeignKeyConstraint baseTableName="deposits"
+                                 baseColumnNames="profile_id"
+                                 constraintName="fk_deposits_profile"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="deposits"
+                                 baseColumnNames="deposit_type_id"
+                                 constraintName="fk_depositsDeposits_type_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="deposits"
+                                 baseColumnNames="currency_type_id"
+                                 constraintName="fk_depositsCurrency_type_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="deposits"
+                                 baseColumnNames="deposit_term_id"
+                                 constraintName="fk_depositsDeposit_term_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="ADD_CHART_OF_ACCOUNTS" author="com.senchuk">
+        <createTable tableName="chart_of_accounts">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="account_number" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="account_code" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="account_name" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="account_description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="chart_of_accounts" columnName="id" columnDataType="bigint"/>
+    </changeSet>
+
+    <changeSet id="char_of_accounts_insert" author="com.senchuk">
+
+        <insert tableName="chart_of_accounts">
+            <column  name="id" value="1"/>
+            <column  name="account_number" value="3014"/>
+            <column  name="account_code" value="CURRENT_ACCOUNT"/>
+            <column  name="account_name" value="Текущий счет (ФЛ)"/>
+            <column  name="account_description" value="Текущие (расчетные) банковские счета физических лиц"/>
+        </insert>
+        <insert tableName="chart_of_accounts">
+            <column  name="id" value="2"/>
+            <column  name="account_number" value="2400"/>
+            <column  name="account_code" value="CREDIT_ACCOUNT"/>
+            <column  name="account_name" value="Кредитный счет (ФЛ)"/>
+            <column  name="account_description" value="Займы физическим лицам на потребительские цели"/>
+        </insert>
+        <insert tableName="chart_of_accounts">
+            <column  name="id" value="3"/>
+            <column  name="account_number" value="1010"/>
+            <column  name="account_code" value="CASHBOX"/>
+            <column  name="account_name" value="Касса банка"/>
+            <column  name="account_description" value="Денежные средства в кассе банка"/>
+        </insert>
+        <insert tableName="chart_of_accounts">
+            <column  name="id" value="4"/>
+            <column  name="account_number" value="1273"/>
+            <column  name="account_code" value="INTEREST_ACCOUNT_FOR_DEPOSITS TO REQUEST"/>
+            <column  name="account_name" value="Проценты по депозитам до востребования"/>
+            <column  name="account_description" value="Начисленные процентные доходы по вкладам (депозитам) до
+востребования, размещенным в Национальном банке и центральных
+(национальных) банках иностранных государств"/>
+        </insert>
+        <insert tableName="chart_of_accounts">
+            <column  name="id" value="5"/>
+            <column  name="account_number" value="1274"/>
+            <column  name="account_code" value="INTEREST_ACCOUNT_FOR_URGENT_DEPOSITS"/>
+            <column  name="account_name" value="Проценты по срочным депозитам"/>
+            <column  name="account_description" value="Начисленные процентные доходы по срочным вкладам (депозитам),
+размещенным в Национальном банке и центральных (национальных)
+банках иностранных государств"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ADD_DEPOSIT_ENTRY" author="com.senchuk">
+        <createTable tableName="deposits_entry">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="profile_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cashbox_debet" type="varchar(55)">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="cashbox_credit" type="varchar(55)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="current_account_debet" type="varchar(55)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="current_account_credit" type="varchar(55)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="interest_account_debet" type="varchar(55)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="interest_account_credit" type="varchar(55)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="deposits_entry" columnName="id" columnDataType="bigint"/>
+
+        <addForeignKeyConstraint baseTableName="deposits_entry"
+                                 baseColumnNames="profile_id"
+                                 constraintName="fk_profile_deposits_entry"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
+
+        <addNotNullConstraint columnName="cashbox_debet"
+                              columnDataType="varchar(55)"
+                              tableName="deposits_entry"
+                              defaultNullValue="0"/>
+        <addNotNullConstraint columnName="cashbox_credit"
+                              columnDataType="varchar(55)"
+                              tableName="deposits_entry"
+                              defaultNullValue="0"/>
+        <addNotNullConstraint columnName="current_account_debet"
+                              columnDataType="varchar(55)"
+                              tableName="deposits_entry"
+                              defaultNullValue="0"/>
+        <addNotNullConstraint columnName="current_account_credit"
+                              columnDataType="varchar(55)"
+                              tableName="deposits_entry"
+                              defaultNullValue="0"/>
+        <addNotNullConstraint columnName="interest_account_debet"
+                              columnDataType="varchar(55)"
+                              tableName="deposits_entry"
+                              defaultNullValue="0"/>
+        <addNotNullConstraint columnName="interest_account_credit"
+                              columnDataType="varchar(55)"
+                              tableName="deposits_entry"
+                              defaultNullValue="0"/>
+    </changeSet>
+
+    <changeSet id="ADD_BANK_ACCOUNTS" author="com.senchuk">
+        <createTable tableName="bank_accounts">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="account_number" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="account_code" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="account_name" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="account_description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="chart_of_accounts" columnName="id" columnDataType="bigint"/>
+    </changeSet>
 </databaseChangeLog>

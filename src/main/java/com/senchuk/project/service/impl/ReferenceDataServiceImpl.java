@@ -1,6 +1,7 @@
 package com.senchuk.project.service.impl;
 
-import com.senchuk.project.model.dto.OptionDto;
+import com.senchuk.project.model.dto.DepositOptionDto;
+import com.senchuk.project.model.dto.ProfileOptionDto;
 import com.senchuk.project.repository.ReferenceDataRepository;
 import com.senchuk.project.service.ReferenceDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,28 @@ public class ReferenceDataServiceImpl implements ReferenceDataService {
     private ReferenceDataRepository referenceDataRepository;
 
     @Override
-    public OptionDto getOptions() {
+    public ProfileOptionDto getProfileOptions() {
 
-        OptionDto optionDto = new OptionDto();
-        optionDto.setCity(referenceDataRepository.getReferenceDataByDefinition("city"));
-        optionDto.setSex(referenceDataRepository.getReferenceDataByDefinition("sex"));
-        optionDto.setStatus(referenceDataRepository.getReferenceDataByDefinition("status"));
-        optionDto.setDisability(referenceDataRepository.getReferenceDataByDefinition("disability"));
-        optionDto.setNationality(referenceDataRepository.getReferenceDataByDefinition("nationality"));
+        ProfileOptionDto profileOptionDto = new ProfileOptionDto();
+        profileOptionDto.setCity(referenceDataRepository.getReferenceDataByDefinition("city"));
+        profileOptionDto.setSex(referenceDataRepository.getReferenceDataByDefinition("sex"));
+        profileOptionDto.setStatus(referenceDataRepository.getReferenceDataByDefinition("status"));
+        profileOptionDto.setDisability(referenceDataRepository.getReferenceDataByDefinition("disability"));
+        profileOptionDto.setNationality(referenceDataRepository.getReferenceDataByDefinition("nationality"));
 
-        return optionDto;
+        return profileOptionDto;
     }
+
+    @Override
+    public DepositOptionDto getDepositOptions() {
+
+        DepositOptionDto depositOptionDto = new DepositOptionDto();
+
+        depositOptionDto.setCurrencyType(referenceDataRepository.getReferenceDataByDefinition("currencyType"));
+        depositOptionDto.setDepositTerm(referenceDataRepository.getReferenceDataByDefinition("depositTerm"));
+        depositOptionDto.setDepositType(referenceDataRepository.getReferenceDataByDefinition("depositType"));
+
+        return depositOptionDto;
+    }
+
 }

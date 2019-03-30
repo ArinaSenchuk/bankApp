@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT user.id from User as user where user.login=:login OR user.email=:email")
-    Long isExists(@Param("login") String login, @Param("email") String email);
+   @Query("SELECT user.id from User as user where user.login=:login OR user.email=:email")
+   Long isExists(@Param("login") String login, @Param("email") String email);
 
     User findByLogin(String login);
 

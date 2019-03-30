@@ -12,13 +12,14 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @GetMapping(value = "/profile")
+    @GetMapping(value = "/current")
     public Profile getProfile() {
         return profileService.getProfile();
     }
 
-    @PostMapping(value = "/save")
+    @PutMapping
     public void saveProfileChanges(@RequestBody Profile profile){
-        profileService.saveProfile(profile);
+        profileService.saveProfileChanges(profile);
     }
+
 }
