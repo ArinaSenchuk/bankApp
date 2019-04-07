@@ -1,12 +1,11 @@
 package com.senchuk.project.service;
 
-
 import com.senchuk.project.model.Deposit;
-
 import java.util.List;
 
-public interface DepositService {
+public interface DepositsAccountsService {
 
-    Deposit saveDeposit(Deposit deposit);
+    void createDepositAccounts(Deposit deposit);
+
 
 }

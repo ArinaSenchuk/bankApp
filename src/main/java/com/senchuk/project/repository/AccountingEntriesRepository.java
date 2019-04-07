@@ -1,11 +1,10 @@
 package com.senchuk.project.repository;
 
-import com.senchuk.project.model.Deposit;
+import com.senchuk.project.model.AccountingEntries;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
-public interface DepositRepository extends JpaRepository<Deposit, Long> {
+public interface AccountingEntriesRepository extends JpaRepository<AccountingEntries, Long> {
 
 }
