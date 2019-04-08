@@ -159,19 +159,49 @@
                     <!--deposit - deposit term-->
         <insert tableName="reference_data" >
             <column  name="label" value="3 месяца"/>
-            <column  name="code" value="3_MONTH"/>
+            <column  name="code" value="3"/>
             <column  name="definition" value="depositTerm"/>
         </insert>
         <insert tableName="reference_data" >
             <column  name="label" value="9 месяцев"/>
-            <column  name="code" value="9_MONTH"/>
+            <column  name="code" value="9"/>
             <column  name="definition" value="depositTerm"/>
         </insert>
         <insert tableName="reference_data" >
             <column  name="label" value="18 месяцев"/>
-            <column  name="code" value="18_MONTH"/>
+            <column  name="code" value="18"/>
             <column  name="definition" value="depositTerm"/>
         </insert>
+
+                    <!--credit - credit type-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="Кредит с аннуитетным платежом"/>
+            <column  name="code" value="CREDIT_WITH_EQUAL_PAYMENTS"/>
+            <column  name="definition" value="creditType"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="Кредит с дифференцированным платежом"/>
+            <column  name="code" value="CREDIT_WITH_DIFFERENTIATED_PAYMENTS"/>
+            <column  name="definition" value="creditType"/>
+        </insert>
+
+                    <!--credit - credit term-->
+        <insert tableName="reference_data" >
+            <column  name="label" value="1 год"/>
+            <column  name="code" value="1"/>
+            <column  name="definition" value="creditTerm"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="2 года"/>
+            <column  name="code" value="2"/>
+            <column  name="definition" value="creditTerm"/>
+        </insert>
+        <insert tableName="reference_data" >
+            <column  name="label" value="5 лет"/>
+            <column  name="code" value="5"/>
+            <column  name="definition" value="creditTerm"/>
+        </insert>
+
 
     </changeSet>
 
@@ -492,6 +522,107 @@
         </insert>
     </changeSet>
 
+    <changeSet id="ADD_PROGRAM_INTEREST_TABLE" author="com.senchuk">
+        <createTable tableName="program_interest">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="program_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="term_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interest" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addAutoIncrement tableName="program_interest" columnName="id" columnDataType="bigint"/>
+
+        <addForeignKeyConstraint baseTableName="program_interest"
+                                 baseColumnNames="program_id"
+                                 constraintName="fk_program_id_reference_data"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="program_interest"
+                                 baseColumnNames="term_id"
+                                 constraintName="fk_term_id_reference_data"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="INSERT_PROGRAM_INTEREST" author="com.senchuk">
+
+                    <!--DEPOSIT-->
+        <insert tableName="program_interest">
+            <column  name="program_id" value="20"/>
+            <column  name="term_id" value="23"/>
+            <column  name="interest" value="9.67"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="20"/>
+            <column  name="term_id" value="24"/>
+            <column  name="interest" value="10.59"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="20"/>
+            <column  name="term_id" value="25"/>
+            <column  name="interest" value="12.5"/>
+        </insert>
+
+        <insert tableName="program_interest">
+            <column  name="program_id" value="21"/>
+            <column  name="term_id" value="23"/>
+            <column  name="interest" value="9.67"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="21"/>
+            <column  name="term_id" value="24"/>
+            <column  name="interest" value="10.59"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="21"/>
+            <column  name="term_id" value="25"/>
+            <column  name="interest" value="12.5"/>
+        </insert>
+
+                    <!--CREDIT-->
+        <insert tableName="program_interest">
+            <column  name="program_id" value="26"/>
+            <column  name="term_id" value="28"/>
+            <column  name="interest" value="20"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="26"/>
+            <column  name="term_id" value="29"/>
+            <column  name="interest" value="20"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="26"/>
+            <column  name="term_id" value="30"/>
+            <column  name="interest" value="20"/>
+        </insert>
+
+        <insert tableName="program_interest">
+            <column  name="program_id" value="27"/>
+            <column  name="term_id" value="28"/>
+            <column  name="interest" value="20"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="27"/>
+            <column  name="term_id" value="29"/>
+            <column  name="interest" value="20"/>
+        </insert>
+        <insert tableName="program_interest">
+            <column  name="program_id" value="27"/>
+            <column  name="term_id" value="30"/>
+            <column  name="interest" value="20"/>
+        </insert>
+    </changeSet>
+
     <changeSet id="ADD_DEPOSIT_TABLE" author="com.senchuk">
         <createTable tableName="deposits">
             <column name="id" type="bigint">
@@ -518,6 +649,15 @@
             <column name="deposit_amount" type="varchar(55)">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="date_of_deposit_end" type="Date">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="daily_charge" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+
         </createTable>
         <addAutoIncrement tableName="deposits" columnName="id" columnDataType="bigint"/>
 
@@ -587,6 +727,112 @@
 
     </changeSet>
 
+
+    <changeSet id="ADD_CREDIT_TABLE" author="com.senchuk">
+        <createTable tableName="credits">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="profile_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credit_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_of_contract" type="varchar(125)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_of_credit_start" type="Date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credit_term_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credit_amount" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="date_of_credit_end" type="Date">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="monthly_charge" type="varchar(55)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <addAutoIncrement tableName="credits" columnName="id" columnDataType="bigint"/>
+
+        <addForeignKeyConstraint baseTableName="credits"
+                                 baseColumnNames="profile_id"
+                                 constraintName="fk_credits_profile"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="credits"
+                                 baseColumnNames="credit_type_id"
+                                 constraintName="fk_creditsCredit_type_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="credits"
+                                 baseColumnNames="currency_type_id"
+                                 constraintName="fk_creditsCurrency_type_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="credits"
+                                 baseColumnNames="credit_term_id"
+                                 constraintName="fk_creditsCredit_term_refId"
+                                 referencedTableName="reference_data"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="ADD_CREDIT_ACCOUNTS_TABLE" author="com.senchuk">
+        <createTable tableName="credits_accounts">
+            <column name="id" type="bigint">
+                <constraints unique="true" primaryKey="true"/>
+            </column>
+            <column name="profile_id" type="bigint">
+                <constraints  nullable="false" unique="false"/>
+            </column>
+            <column name="credit_id" type="bigint">
+                <constraints  nullable="false" unique="false"/>
+            </column>
+            <column name="master_account_number" type="varchar(25)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="master_account_balance" type="varchar(25)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="interest_account_number" type="varchar(25)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="interest_account_balance" type="varchar(25)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+
+        </createTable>
+        <addAutoIncrement tableName="credits_accounts" columnName="id" columnDataType="bigint"/>
+
+        <addForeignKeyConstraint baseTableName="credits_accounts"
+                                 baseColumnNames="profile_id"
+                                 constraintName="fk_profile_credits_accounts"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="credits_accounts"
+                                 baseColumnNames="credit_id"
+                                 constraintName="fk_credit_credits_accounts"
+                                 referencedTableName="credits"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+
     <changeSet id="ADD_CHART_OF_ACCOUNTS_TABLE" author="com.senchuk">
         <createTable tableName="chart_of_accounts">
             <column name="id" type="bigint">
@@ -611,42 +857,30 @@
     <changeSet id="char_of_accounts_insert" author="com.senchuk">
 
         <insert tableName="chart_of_accounts">
-            <column  name="id" value="1"/>
             <column  name="account_number" value="3014"/>
             <column  name="account_code" value="CURRENT_ACCOUNT"/>
             <column  name="account_name" value="Текущий счет (ФЛ)"/>
             <column  name="account_description" value="Текущие (расчетные) банковские счета физических лиц"/>
         </insert>
         <insert tableName="chart_of_accounts">
-            <column  name="id" value="2"/>
-            <column  name="account_number" value="2400"/>
-            <column  name="account_code" value="CREDIT_ACCOUNT"/>
-            <column  name="account_name" value="Кредитный счет (ФЛ)"/>
-            <column  name="account_description" value="Займы физическим лицам на потребительские цели"/>
-        </insert>
-        <insert tableName="chart_of_accounts">
-            <column  name="id" value="3"/>
             <column  name="account_number" value="3404"/>
             <column  name="account_code" value="ACCOUNT_FOR_DEPOSIT_TO_REQUEST"/>
             <column  name="account_name" value="Вклады до востребования"/>
             <column  name="account_description" value="Счет вкладов до востребования"/>
         </insert>
         <insert tableName="chart_of_accounts">
-            <column  name="id" value="4"/>
             <column  name="account_number" value="3414"/>
             <column  name="account_code" value="ACCOUNT_FOR_URGENT_DEPOSIT"/>
             <column  name="account_name" value="Срочне вклады"/>
             <column  name="account_description" value="Счет срочных вкладов"/>
         </insert>
         <!--<insert tableName="chart_of_accounts">-->
-            <!--<column  name="id" value="3"/>-->
             <!--<column  name="account_number" value="1010"/>-->
             <!--<column  name="account_code" value="CASHBOX"/>-->
             <!--<column  name="account_name" value="Касса банка"/>-->
             <!--<column  name="account_description" value="Денежные средства в кассе банка"/>-->
         <!--</insert>-->
         <insert tableName="chart_of_accounts">
-            <column  name="id" value="5"/>
             <column  name="account_number" value="3470"/>
             <column  name="account_code" value="INTEREST_ACCOUNT_FOR_DEPOSIT_TO_REQUEST"/>
             <column  name="account_name" value="Проценты по депозитам до востребования"/>
@@ -655,7 +889,6 @@
 (национальных) банках иностранных государств"/>
         </insert>
         <insert tableName="chart_of_accounts">
-            <column  name="id" value="6"/>
             <column  name="account_number" value="3471"/>
             <column  name="account_code" value="INTEREST_ACCOUNT_FOR_URGENT_DEPOSIT"/>
             <column  name="account_name" value="Проценты по срочным депозитам"/>
@@ -664,11 +897,22 @@
 банках иностранных государств"/>
         </insert>
         <insert tableName="chart_of_accounts">
-            <column  name="id" value="7"/>
             <column  name="account_number" value="7327"/>
             <column  name="account_code" value="BANK_DEVELOPMENT_FUND_ACCOUNT"/>
             <column  name="account_name" value="Фонд развития банка"/>
             <column  name="account_description" value="Счет, используемый для средств финансирования капитальных фложений"/>
+        </insert>
+        <insert tableName="chart_of_accounts">
+            <column  name="account_number" value="2400"/>
+            <column  name="account_code" value="CREDIT_ACCOUNT"/>
+            <column  name="account_name" value="Кредитный счет (ФЛ)"/>
+            <column  name="account_description" value="Займы физическим лицам на потребительские цели"/>
+        </insert>
+        <insert tableName="chart_of_accounts">
+            <column  name="account_number" value="2470"/>
+            <column  name="account_code" value="INTEREST_CREDIT_ACCOUNT"/>
+            <column  name="account_name" value="Счет для процентов по кредитам"/>
+            <column  name="account_description" value="Счет для процентов по крдитам физическим лицам на потребительские нужды"/>
         </insert>
     </changeSet>
 

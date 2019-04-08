@@ -22,6 +22,8 @@ public class Deposit{
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
+    private long profile_id;
+
     @ManyToOne
     private ReferenceData depositType;
     private String numberOfContract;
@@ -29,11 +31,12 @@ public class Deposit{
     @ManyToOne
     private ReferenceData currencyType;
     private LocalDate dateOfDepositStart;
+    private LocalDate dateOfDepositEnd;
 
     @ManyToOne
     private ReferenceData depositTerm;
     private String depositAmount;
 
-    private long profile_id;
+    private String dailyCharge;
 
 }
