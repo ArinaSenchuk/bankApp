@@ -1,5 +1,6 @@
 package com.senchuk.project.service;
 
+import com.senchuk.project.model.dto.CreditOptionDto;
 import com.senchuk.project.model.dto.DepositOptionDto;
 import com.senchuk.project.model.dto.ProfileOptionDto;
 
@@ -10,4 +11,5 @@ public interface ReferenceDataService {
 
     DepositOptionDto getDepositOptions();
 
+    CreditOptionDto getCreditOptions();
 }

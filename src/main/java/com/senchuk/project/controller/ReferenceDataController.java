@@ -1,5 +1,6 @@
 package com.senchuk.project.controller;
 
+import com.senchuk.project.model.dto.CreditOptionDto;
 import com.senchuk.project.model.dto.DepositOptionDto;
 import com.senchuk.project.model.dto.ProfileOptionDto;
 import com.senchuk.project.service.ReferenceDataService;
@@ -22,4 +23,7 @@ public class ReferenceDataController {
     public DepositOptionDto getDepositOptions() {
         return referenceDataService.getDepositOptions();
     }
+
+    @GetMapping(value = "/credit")
+    public CreditOptionDto getCreditOptions() { return  referenceDataService.getCreditOptions();}
 }

@@ -27,5 +27,5 @@ public class ClientAccounts {
     private String accountNumber;
     private String accountBalance;
 
-    private long profile_id;
+    private long profileId;
 }

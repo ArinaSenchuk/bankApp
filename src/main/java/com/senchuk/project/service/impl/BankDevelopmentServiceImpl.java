@@ -6,6 +6,8 @@ import com.senchuk.project.service.BankDevelopmentFundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+
 @Service(value ="bankDevelopmentFundService")
 public class BankDevelopmentServiceImpl implements BankDevelopmentFundService {
 
@@ -14,13 +16,13 @@ public class BankDevelopmentServiceImpl implements BankDevelopmentFundService {
 
     @Override
     public void putMoneyOnTheAccount(String amount) {
-        long balance = Long.parseLong(bankDevelopmentFundRepository.getBalanceOfBankDevelopmentFund());
+        double balance = Double.parseDouble(bankDevelopmentFundRepository.getBalanceOfBankDevelopmentFund());
 
         BankDevelopmentFund bankDevelopmentFund = new BankDevelopmentFund();
-        balance = balance+Long.parseLong(amount);
+        balance = balance + Double.parseDouble(amount);
 
         bankDevelopmentFund.setId(1);
-        bankDevelopmentFund.setBalance(Long.toString(balance));
+        bankDevelopmentFund.setBalance(Double.toString(balance));
 
         bankDevelopmentFundRepository.save(bankDevelopmentFund);
 
@@ -28,13 +30,13 @@ public class BankDevelopmentServiceImpl implements BankDevelopmentFundService {
 
     @Override
     public void getMoneyFromTheAccount(String amount) {
-        long balance = Long.parseLong(bankDevelopmentFundRepository.getBalanceOfBankDevelopmentFund());
+        double balance = Double.parseDouble(bankDevelopmentFundRepository.getBalanceOfBankDevelopmentFund());
 
         BankDevelopmentFund bankDevelopmentFund = new BankDevelopmentFund();
-        balance = balance-Long.parseLong(amount);
+        balance = balance-Double.parseDouble(amount);
 
         bankDevelopmentFund.setId(1);
-        bankDevelopmentFund.setBalance(Long.toString(balance));
+        bankDevelopmentFund.setBalance(Double.toString(balance));
 
         bankDevelopmentFundRepository.save(bankDevelopmentFund);
 

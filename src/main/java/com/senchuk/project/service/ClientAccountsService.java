@@ -6,7 +6,9 @@ public interface ClientAccountsService {
 
     void saveAccount(long profile_id);
 
-    void getMoneyFromAccount(long profile_id, String amount);
+    void getMoneyFromAccount(String amount);
+
+    void putMoneyFromAccount(String amount);
 
     ClientAccounts getCurrentClientAccount();
 }

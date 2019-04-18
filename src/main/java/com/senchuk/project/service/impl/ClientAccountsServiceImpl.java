@@ -24,9 +24,9 @@ public class ClientAccountsServiceImpl implements ClientAccountsService {
     private SecurityHelper securityHelper;
 
     @Override
-    public void saveAccount(long profile_id) {
+    public void saveAccount(long profileId) {
         ClientAccounts clientAccounts = new ClientAccounts();
-        clientAccounts.setProfile_id(profile_id);
+        clientAccounts.setProfileId(profileId);
         clientAccounts.setAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT") + generateNum());
         clientAccounts.setAccountBalance("0");
 
@@ -34,8 +34,17 @@ public class ClientAccountsServiceImpl implements ClientAccountsService {
     }
 
     @Override
-    public void getMoneyFromAccount(long profile_id, String amount) {
+    public void getMoneyFromAccount(String amount) {
+        ClientAccounts clientAccounts = clientAccountsRepository.findByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        clientAccounts.setAccountBalance(Double.toString(Double.parseDouble(clientAccounts.getAccountBalance()) - Double.parseDouble(amount)));
+        clientAccountsRepository.save(clientAccounts);
+    }
 
+    @Override
+    public void putMoneyFromAccount(String amount) {
+        ClientAccounts clientAccounts = clientAccountsRepository.findByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        clientAccounts.setAccountBalance(Double.toString(Double.parseDouble(clientAccounts.getAccountBalance()) + Double.parseDouble(amount)));
+        clientAccountsRepository.save(clientAccounts);
     }
 
     @Override

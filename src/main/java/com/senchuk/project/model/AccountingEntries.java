@@ -25,7 +25,7 @@ public class AccountingEntries {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    private long deposit_id;
+    private long profile_id;
 
     private String debet;
     private String credit;

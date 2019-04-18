@@ -9,4 +9,10 @@ public interface DepositService {
 
     Deposit saveDeposit(Deposit deposit);
 
+    List<Deposit> getDeposits();
+
+    String getDailyCharge(Deposit deposit);
+
+    List<Deposit> getAllDepositsOfCurrentUser();
+
 }

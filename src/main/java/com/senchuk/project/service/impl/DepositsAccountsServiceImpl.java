@@ -23,8 +23,8 @@ public class DepositsAccountsServiceImpl implements DepositsAccountsService {
     public void createDepositAccounts(Deposit deposit) {
         DepositsAccounts depositsAccounts = new DepositsAccounts();
 
-        depositsAccounts.setProfile_id(deposit.getProfile_id());
-        depositsAccounts.setDeposit_id(deposit.getId());
+        depositsAccounts.setProfile_id(deposit.getProfileId());
+        depositsAccounts.setDepositId(deposit.getId());
         depositsAccounts.setMaster_account_balance(deposit.getDepositAmount());
         depositsAccounts.setInterest_account_balance("0");
 
@@ -34,6 +34,16 @@ public class DepositsAccountsServiceImpl implements DepositsAccountsService {
         depositsAccountsRepository.save(depositsAccounts);
     }
 
+    @Override
+    public void putInterest(long depositId, String interestAmount) {
+
+        DepositsAccounts depositsAccounts = depositsAccountsRepository.findByDepositId(depositId);
+
+        double amount = Double.parseDouble(depositsAccounts.getInterest_account_balance()) + Double.parseDouble(interestAmount);
+        depositsAccounts.setInterest_account_balance(Double.toString(amount));
+
+        depositsAccountsRepository.save(depositsAccounts);
+    }
 
 
     private int generateNum() {

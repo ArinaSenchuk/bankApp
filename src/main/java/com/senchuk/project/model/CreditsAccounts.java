@@ -13,19 +13,19 @@ import javax.persistence.Table;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "deposits_accounts")
+@Table(name = "credits_accounts")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DepositsAccounts {
+public class CreditsAccounts {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
     private long profile_id;
-    private long depositId;
+    private long credit_id;
 
     private String master_account_number;
     private String master_account_balance;

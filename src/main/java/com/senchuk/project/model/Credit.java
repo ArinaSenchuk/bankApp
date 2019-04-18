@@ -11,32 +11,32 @@ import java.time.LocalDate;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "deposits")
+@Table(name = "credits")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Deposit{
+public class Credit {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    private long profileId;
+    private long profile_id;
 
     @ManyToOne
-    private ReferenceData depositType;
+    private ReferenceData creditType;
     private String numberOfContract;
 
     @ManyToOne
     private ReferenceData currencyType;
-    private LocalDate dateOfDepositStart;
-    private LocalDate dateOfDepositEnd;
+    private LocalDate dateOfCreditStart;
+    private LocalDate dateOfCreditEnd;
 
     @ManyToOne
-    private ReferenceData depositTerm;
-    private String depositAmount;
+    private ReferenceData creditTerm;
+    private String creditAmount;
 
-    private String dailyCharge;
+    private String monthlyCharge;
 
 }

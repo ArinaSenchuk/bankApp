@@ -1,5 +1,6 @@
 package com.senchuk.project.service.impl;
 
+import com.senchuk.project.model.dto.CreditOptionDto;
 import com.senchuk.project.model.dto.DepositOptionDto;
 import com.senchuk.project.model.dto.ProfileOptionDto;
 import com.senchuk.project.repository.ReferenceDataRepository;
@@ -36,6 +37,18 @@ public class ReferenceDataServiceImpl implements ReferenceDataService {
         depositOptionDto.setDepositType(referenceDataRepository.getReferenceDataByDefinition("depositType"));
 
         return depositOptionDto;
+    }
+
+    @Override
+    public CreditOptionDto getCreditOptions() {
+
+        CreditOptionDto creditOptionDto  = new CreditOptionDto();
+
+        creditOptionDto.setCreditTerm(referenceDataRepository.getReferenceDataByDefinition("creditTerm"));
+        creditOptionDto.setCreditType(referenceDataRepository.getReferenceDataByDefinition("creditType"));
+        creditOptionDto.setCurrencyType(referenceDataRepository.getReferenceDataByDefinition("currencyType"));
+
+        return creditOptionDto;
     }
 
 }

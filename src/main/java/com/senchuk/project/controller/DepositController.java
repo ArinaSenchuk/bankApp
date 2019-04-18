@@ -7,6 +7,8 @@ import com.senchuk.project.service.DepositsAccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/api/deposits", produces = "application/json")
@@ -26,5 +28,10 @@ public class DepositController {
         depositService.saveDeposit(deposit);
         depositsAccountsService.createDepositAccounts(deposit);
         accountingEntriesService.startDepositProgram(deposit);
+    }
+
+    @GetMapping
+    public List<Deposit> getAll() {
+        return depositService.getAllDepositsOfCurrentUser();
     }
 }

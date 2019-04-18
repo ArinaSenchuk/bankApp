@@ -139,7 +139,7 @@
             <column  name="definition" value="depositType"/>
         </insert>
         <insert tableName="reference_data" >
-            <column  name="label" value="Депозитный срочный вклад с выплатой процентов"/>
+            <column  name="label" value="Депозитный срочный вклад"/>
             <column  name="code" value="URGENT_DEPOSIT"/>
             <column  name="definition" value="depositType"/>
         </insert>
@@ -415,7 +415,7 @@
             <!--<column name="email" value="ivanov.i@gmail.com"/>-->
             <!--<column name="login" value="ivanovIvan"/>-->
             <!--<column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>-->
-            <!--<column name="profile_id" value="3"/>-->
+            <!--<column name="profileId" value="3"/>-->
         <!--</insert>-->
 
 
@@ -445,7 +445,7 @@
             <!--<column name="email" value="sudorov@gmail.com"/>-->
             <!--<column name="login" value="sudorov"/>-->
             <!--<column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>-->
-            <!--<column name="profile_id" value="4"/>-->
+            <!--<column name="profileId" value="4"/>-->
         <!--</insert>-->
 
     <!--</changeSet>-->
@@ -476,7 +476,7 @@
             <!--<column name="email" value="i_lavrova@gmail.com"/>-->
             <!--<column name="login" value="lavrova"/>-->
             <!--<column name="password" value="$2a$04$I9Q2sDc4QGGg5WNTLmsz0.fvGv3OjoZyj81PrSFyGOqMphqfS2qKu"/>-->
-            <!--<column name="profile_id" value="5"/>-->
+            <!--<column name="profileId" value="5"/>-->
         <!--</insert>-->
 
     <!--</changeSet>-->
@@ -512,13 +512,13 @@
             <column  name="id" value="1"/>
             <column  name="profile_id" value="1"/>
             <column  name="account_number" value="3014659205186"/>
-            <column  name="account_balance" value="100"/>
+            <column  name="account_balance" value="0"/>
         </insert>
         <insert tableName="client_accounts">
             <column  name="id" value="2"/>
             <column  name="profile_id" value="2"/>
             <column  name="account_number" value="3014054883816"/>
-            <column  name="account_balance" value="100"/>
+            <column  name="account_balance" value="0"/>
         </insert>
     </changeSet>
 
@@ -760,7 +760,7 @@
             </column>
 
             <column name="monthly_charge" type="varchar(55)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
 
         </createTable>
@@ -865,7 +865,7 @@
         <insert tableName="chart_of_accounts">
             <column  name="account_number" value="3404"/>
             <column  name="account_code" value="ACCOUNT_FOR_DEPOSIT_TO_REQUEST"/>
-            <column  name="account_name" value="Вклады до востребования"/>
+            <column  name="account_name" value="Вклады до востребования "/>
             <column  name="account_description" value="Счет вкладов до востребования"/>
         </insert>
         <insert tableName="chart_of_accounts">
@@ -874,16 +874,16 @@
             <column  name="account_name" value="Срочне вклады"/>
             <column  name="account_description" value="Счет срочных вкладов"/>
         </insert>
-        <!--<insert tableName="chart_of_accounts">-->
-            <!--<column  name="account_number" value="1010"/>-->
-            <!--<column  name="account_code" value="CASHBOX"/>-->
-            <!--<column  name="account_name" value="Касса банка"/>-->
-            <!--<column  name="account_description" value="Денежные средства в кассе банка"/>-->
-        <!--</insert>-->
+        <insert tableName="chart_of_accounts">
+            <column  name="account_number" value="1010"/>
+            <column  name="account_code" value="CASHBOX"/>
+            <column  name="account_name" value="Касса банка"/>
+            <column  name="account_description" value="Денежные средства в кассе банка"/>
+        </insert>
         <insert tableName="chart_of_accounts">
             <column  name="account_number" value="3470"/>
             <column  name="account_code" value="INTEREST_ACCOUNT_FOR_DEPOSIT_TO_REQUEST"/>
-            <column  name="account_name" value="Проценты по депозитам до востребования"/>
+            <column  name="account_name" value="Проценты по депозитам до востребования "/>
             <column  name="account_description" value="Начисленные процентные доходы по вкладам (депозитам) до
 востребования, размещенным в Национальном банке и центральных
 (национальных) банках иностранных государств"/>
@@ -921,7 +921,7 @@
             <column name="id" type="bigint">
                 <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
-            <column name="deposit_id" type="bigint">
+            <column name="profile_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="debet" type="varchar(25)" defaultValue="0">
@@ -937,11 +937,10 @@
         <addAutoIncrement tableName="accounting_entries" columnName="id" columnDataType="bigint"/>
 
         <addForeignKeyConstraint baseTableName="accounting_entries"
-                                 baseColumnNames="deposit_id"
-                                 constraintName="fk_deposit_accounting_entries"
-                                 referencedTableName="deposits"
+                                 baseColumnNames="profile_id"
+                                 constraintName="fk_profile_accounting_entries"
+                                 referencedTableName="profiles"
                                  referencedColumnNames="id"/>
-
         <addDefaultValue columnName="debet"
                          defaultValue="0"
                          tableName="accounting_entries"

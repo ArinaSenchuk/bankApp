@@ -7,5 +7,7 @@ public interface DepositsAccountsService {
 
     void createDepositAccounts(Deposit deposit);
 
+    void putInterest(long deposit_id, String interestAmount);
+
 
 }

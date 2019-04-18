@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClientAccountsRepository extends JpaRepository<ClientAccounts,Long> {
 
-    @Query("select account from ClientAccounts as account where account.profile_id=:profile_id")
-    ClientAccounts findByProfileId(@Param("profile_id") Long profile_id);
+    ClientAccounts findByProfileId(@Param("profileId") Long profileId);
 
 
 }
