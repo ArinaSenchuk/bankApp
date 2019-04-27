@@ -23,13 +23,13 @@ public class CreditsAccountsServiceImpl implements CreditsAccountsService {
     public void createCreditAccounts(Credit credit) {
         CreditsAccounts creditsAccounts = new CreditsAccounts();
 
-        creditsAccounts.setProfile_id(credit.getProfile_id());
-        creditsAccounts.setCredit_id(credit.getId());
-        creditsAccounts.setMaster_account_number(chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT") + generateNum());
-        creditsAccounts.setInterest_account_number(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT") + generateNum());
+        creditsAccounts.setProfileId(credit.getProfileId());
+        creditsAccounts.setCreditId(credit.getId());
+        creditsAccounts.setMasterAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT") + generateNum());
+        creditsAccounts.setInterestAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT") + generateNum());
 
-        creditsAccounts.setMaster_account_balance(credit.getCreditAmount());
-        creditsAccounts.setInterest_account_balance("0");
+        creditsAccounts.setMasterAccountBalance(credit.getCreditAmount());
+        creditsAccounts.setInterestAccountBalance("0");
 
         creditsAccountsRepository.save(creditsAccounts);
     }

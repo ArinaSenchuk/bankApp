@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(User user, Long profileId) {
-        user.setProfile_id(profileId);
+        user.setProfileId(profileId);
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(10)));
         this.userRepository.save(user);
     }

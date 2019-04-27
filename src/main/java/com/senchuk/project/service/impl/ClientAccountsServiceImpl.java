@@ -41,8 +41,22 @@ public class ClientAccountsServiceImpl implements ClientAccountsService {
     }
 
     @Override
+    public void getMoneyFromAccount(String amount, long profileId) {
+        ClientAccounts clientAccounts = clientAccountsRepository.findByProfileId(profileId);
+        clientAccounts.setAccountBalance(Double.toString(Double.parseDouble(clientAccounts.getAccountBalance()) - Double.parseDouble(amount)));
+        clientAccountsRepository.save(clientAccounts);
+    }
+
+    @Override
     public void putMoneyFromAccount(String amount) {
         ClientAccounts clientAccounts = clientAccountsRepository.findByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        clientAccounts.setAccountBalance(Double.toString(Double.parseDouble(clientAccounts.getAccountBalance()) + Double.parseDouble(amount)));
+        clientAccountsRepository.save(clientAccounts);
+    }
+
+    @Override
+    public void putMoneyFromAccount(String amount, long profileId) {
+        ClientAccounts clientAccounts = clientAccountsRepository.findByProfileId(profileId);
         clientAccounts.setAccountBalance(Double.toString(Double.parseDouble(clientAccounts.getAccountBalance()) + Double.parseDouble(amount)));
         clientAccountsRepository.save(clientAccounts);
     }

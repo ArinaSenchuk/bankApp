@@ -24,7 +24,7 @@ public class User {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    private long profile_id;
+    private long profileId;
 
     private String login;
     private String email;

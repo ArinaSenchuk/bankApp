@@ -8,6 +8,7 @@ import com.senchuk.project.service.DepositsAccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Random;
 
 @Service(value = "depositsAccountsService")
@@ -23,13 +24,13 @@ public class DepositsAccountsServiceImpl implements DepositsAccountsService {
     public void createDepositAccounts(Deposit deposit) {
         DepositsAccounts depositsAccounts = new DepositsAccounts();
 
-        depositsAccounts.setProfile_id(deposit.getProfileId());
+        depositsAccounts.setProfileId(deposit.getProfileId());
         depositsAccounts.setDepositId(deposit.getId());
-        depositsAccounts.setMaster_account_balance(deposit.getDepositAmount());
-        depositsAccounts.setInterest_account_balance("0");
+        depositsAccounts.setMasterAccountBalance(deposit.getDepositAmount());
+        depositsAccounts.setInterestAccountBalance("0");
 
-        depositsAccounts.setMaster_account_number(chartOfAccountsRepository.getAccountNumberByAccountCode("ACCOUNT_FOR_" + deposit.getDepositType().getCode()) + generateNum());
-        depositsAccounts.setInterest_account_number(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_ACCOUNT_FOR_" + deposit.getDepositType().getCode()) + generateNum());
+        depositsAccounts.setMasterAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("ACCOUNT_FOR_" + deposit.getDepositType().getCode()) + generateNum());
+        depositsAccounts.setInterestAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_ACCOUNT_FOR_" + deposit.getDepositType().getCode()) + generateNum());
 
         depositsAccountsRepository.save(depositsAccounts);
     }
@@ -39,10 +40,46 @@ public class DepositsAccountsServiceImpl implements DepositsAccountsService {
 
         DepositsAccounts depositsAccounts = depositsAccountsRepository.findByDepositId(depositId);
 
-        double amount = Double.parseDouble(depositsAccounts.getInterest_account_balance()) + Double.parseDouble(interestAmount);
-        depositsAccounts.setInterest_account_balance(Double.toString(amount));
+        double amount = Double.parseDouble(depositsAccounts.getInterestAccountBalance()) + Double.parseDouble(interestAmount);
+        depositsAccounts.setInterestAccountBalance(Double.toString(amount));
 
         depositsAccountsRepository.save(depositsAccounts);
+    }
+
+    @Override
+    public String getInterest(long depositId) {
+        DepositsAccounts depositsAccounts = depositsAccountsRepository.findByDepositId(depositId);
+        String interest = depositsAccounts.getInterestAccountBalance();
+        depositsAccounts.setInterestAccountBalance("0");
+
+        depositsAccountsRepository.save(depositsAccounts);
+        return interest;
+    }
+
+    @Override
+    public void getMoneyFromMaster(Deposit deposit) {
+        DepositsAccounts depositsAccounts = depositsAccountsRepository.findByDepositId(deposit.getId());
+
+        double amount = Double.parseDouble(depositsAccounts.getMasterAccountBalance());
+
+        depositsAccounts.setMasterAccountBalance(Double.toString(amount - Double.parseDouble(deposit.getDepositAmount())));
+
+        depositsAccountsRepository.save(depositsAccounts);
+    }
+
+    @Override
+    public void putMoneyToMaster(Deposit deposit) {
+        DepositsAccounts depositsAccounts = depositsAccountsRepository.findByDepositId(deposit.getId());
+        double amount = Double.parseDouble(depositsAccounts.getMasterAccountBalance());
+
+        depositsAccounts.setMasterAccountBalance(Double.toString(amount + Double.parseDouble(deposit.getDepositAmount())));
+        depositsAccountsRepository.save(depositsAccounts);
+    }
+
+    @Transactional
+    @Override
+    public void deleteDepositAccount(long depositId) {
+        depositsAccountsRepository.deleteByDepositId(depositId);
     }
 
 

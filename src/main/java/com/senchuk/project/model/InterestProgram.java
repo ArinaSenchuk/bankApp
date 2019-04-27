@@ -10,21 +10,21 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "program_interest")
+@Table(name = "interest_program")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProgramInterest {
+public class InterestProgram {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
 
-    private long program_id;
+    private long programId;
 
-    private long term_id;
+    private long termId;
 
     private String interest;
 }

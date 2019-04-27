@@ -20,7 +20,7 @@ public class DepositServiceImpl implements DepositService {
     @Autowired
     private SecurityHelper securityHelper;
     @Autowired
-    private ProgramInterestService programInterestService;
+    private InterestProgramService interestProgramService;
 
 
     @Override
@@ -28,7 +28,6 @@ public class DepositServiceImpl implements DepositService {
 
         deposit.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
         deposit.setDateOfDepositEnd(deposit.getDateOfDepositStart().plusMonths(Integer.parseInt(deposit.getDepositTerm().getCode())));
-        deposit.setDailyCharge(getDailyCharge(deposit));
         return depositRepository.save(deposit);
     }
 
@@ -39,7 +38,7 @@ public class DepositServiceImpl implements DepositService {
 
 
     public String getDailyCharge(Deposit deposit) {
-       double interest = Double.parseDouble((programInterestService.getValueOfInterest(deposit.getDepositTerm().getId(), deposit.getDepositType().getId())));
+       double interest = Double.parseDouble((interestProgramService.getValueOfInterest(deposit.getDepositTerm().getId(), deposit.getDepositType().getId())));
        double yearAmount = Float.parseFloat(deposit.getDepositAmount()) * interest / 100;
        double dailyAmount = yearAmount / 365;
        return Double.toString(dailyAmount);
@@ -48,6 +47,11 @@ public class DepositServiceImpl implements DepositService {
     @Override
     public List<Deposit> getAllDepositsOfCurrentUser() {
         return depositRepository.findByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+    }
+
+    @Override
+    public void deleteDeposit(long depositId) {
+        depositRepository.deleteById(depositId);
     }
 }
 

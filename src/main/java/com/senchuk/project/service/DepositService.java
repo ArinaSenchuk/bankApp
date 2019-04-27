@@ -15,4 +15,6 @@ public interface DepositService {
 
     List<Deposit> getAllDepositsOfCurrentUser();
 
+    void deleteDeposit(long depositId);
+
 }

@@ -7,7 +7,14 @@ public interface DepositsAccountsService {
 
     void createDepositAccounts(Deposit deposit);
 
-    void putInterest(long deposit_id, String interestAmount);
+    void putInterest(long deposiId, String interestAmount);
 
+    String getInterest(long depositId);
+
+    void getMoneyFromMaster(Deposit deposit);
+
+    void putMoneyToMaster(Deposit deposit);
+
+    void deleteDepositAccount(long depositId);
 
 }

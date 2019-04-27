@@ -27,7 +27,7 @@ public class DepositController {
     public void saveDeposit(@RequestBody Deposit deposit){
         depositService.saveDeposit(deposit);
         depositsAccountsService.createDepositAccounts(deposit);
-        accountingEntriesService.startDepositProgram(deposit);
+        accountingEntriesService.transferFromPersonalAccToDepositAcc(deposit);
     }
 
     @GetMapping

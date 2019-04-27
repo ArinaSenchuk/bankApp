@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByLogin(String login);
 
-    @Query("SELECT user.profile_id from User as user where user.login=:login")
+    @Query("SELECT user.profileId from User as user where user.login=:login")
     Long getProfileIdByLogin(@Param ("login") String login);
 }

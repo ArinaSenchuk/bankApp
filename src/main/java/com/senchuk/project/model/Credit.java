@@ -22,7 +22,7 @@ public class Credit {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    private long profile_id;
+    private long profileId;
 
     @ManyToOne
     private ReferenceData creditType;

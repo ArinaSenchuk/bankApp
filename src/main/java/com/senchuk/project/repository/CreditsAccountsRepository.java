@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CreditsAccountsRepository extends JpaRepository<CreditsAccounts, Long> {
 
-    @Query("select account.master_account_balance from CreditsAccounts as account where account.profile_id=:id")
-    String getBalanceOfClientAccount(@Param("id") long profile_id);
+    @Query("select account.masterAccountBalance from CreditsAccounts as account where account.profileId=:id")
+    String getBalanceOfClientAccount(@Param("id") long profileId);
 
 }

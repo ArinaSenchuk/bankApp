@@ -9,11 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DepositsAccountsRepository extends JpaRepository<DepositsAccounts, Long> {
 
-    @Query("select account.master_account_balance from DepositsAccounts as account where account.profile_id=:profileId")
-    String getBalanceOfClientAccount(@Param("profileId") long profile_id);
-
-    //@Query("select account from DepositsAccounts as account where account.depositId =: depositId")
-    //DepositsAccounts findByDepositId(@Param("depositId") long depositId);
+    @Query("select account.masterAccountBalance from DepositsAccounts as account where account.profileId=:profileId")
+    String getBalanceOfClientAccount(@Param("profileId") long profileId);
 
     DepositsAccounts findByDepositId(long depositId);
+
+    void deleteByDepositId(long depositId);
 }

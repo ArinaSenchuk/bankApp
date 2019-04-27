@@ -24,11 +24,11 @@ public class CreditsAccounts {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    private long profile_id;
-    private long credit_id;
+    private long profileId;
+    private long creditId;
 
-    private String master_account_number;
-    private String master_account_balance;
-    private String interest_account_number;
-    private String interest_account_balance;
+    private String masterAccountNumber;
+    private String masterAccountBalance;
+    private String interestAccountNumber;
+    private String interestAccountBalance;
 }

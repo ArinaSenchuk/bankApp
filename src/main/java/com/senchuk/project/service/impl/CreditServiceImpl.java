@@ -22,7 +22,7 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Credit save(Credit credit) {
 
-        credit.setProfile_id(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        credit.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
         credit.setDateOfCreditEnd(credit.getDateOfCreditStart().plusYears(Integer.parseInt(credit.getCreditTerm().getCode())));
         return creditRepository.save(credit);
     }

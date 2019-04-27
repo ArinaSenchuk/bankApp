@@ -37,6 +37,4 @@ public class Deposit{
     private ReferenceData depositTerm;
     private String depositAmount;
 
-    private String dailyCharge;
-
 }
