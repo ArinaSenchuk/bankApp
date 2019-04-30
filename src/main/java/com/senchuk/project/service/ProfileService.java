@@ -9,4 +9,6 @@ public interface ProfileService {
     Profile saveProfileChanges(Profile profile);
 
     Profile getProfile();
+
+    boolean deleteProfile();
 }

@@ -11,4 +11,6 @@ public interface UserService {
     void delete(Long id);
 
     void saveUser(User user, Long profileId);
+
+    void deleteUser(long profileId);
 }

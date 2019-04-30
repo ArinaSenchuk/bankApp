@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -30,5 +31,11 @@ public class UserServiceImpl implements UserService {
         user.setProfileId(profileId);
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(10)));
         this.userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(long profileId) {
+        userRepository.deleteByProfileId(profileId);
     }
 }

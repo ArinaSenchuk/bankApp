@@ -11,5 +11,5 @@ public interface ClientAccountsRepository extends JpaRepository<ClientAccounts,L
 
     ClientAccounts findByProfileId(@Param("profileId") Long profileId);
 
-
+    void deleteByProfileId(long profileId);
 }

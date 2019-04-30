@@ -35,6 +35,11 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private SecurityHelper securityHelper;
 
     @Override
+    public void deleteEntriesByProfileId(long profileId) {
+        accountingEntriesRepository.deleteAllByProfileId(profileId);
+    }
+
+    @Override
     public void startDepositProgram(Deposit deposit) {
         transferFromDepositAccToBankDevFund(deposit);
     }
@@ -54,7 +59,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     public void transferFromPersonalAccToDepositAcc(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(deposit.getProfileId());
+        accountingEntries.setProfileId(deposit.getProfileId());
         accountingEntries.setAmount(deposit.getDepositAmount());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT"));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
@@ -67,7 +72,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void transferFromDepositAccTOPersonalAcc(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(deposit.getProfileId());
+        accountingEntries.setProfileId(deposit.getProfileId());
         accountingEntries.setAmount(deposit.getDepositAmount());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT"));
@@ -82,7 +87,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void transferFromDepositAccToBankDevFund(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(deposit.getProfileId());
+        accountingEntries.setProfileId(deposit.getProfileId());
         accountingEntries.setAmount(deposit.getDepositAmount());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
@@ -96,7 +101,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void transferFromInterestAccToPersonalAcc(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(deposit.getProfileId());
+        accountingEntries.setProfileId(deposit.getProfileId());
         accountingEntries.setAmount(depositsAccountsService.getInterest(deposit.getId())); //get all money
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT"));
@@ -109,7 +114,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void transferFromBankDevFundToDepositAcc(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(deposit.getProfileId());
+        accountingEntries.setProfileId(deposit.getProfileId());
         accountingEntries.setAmount(deposit.getDepositAmount());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
@@ -124,7 +129,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     public void chargeInterestOnDeposits(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(deposit.getProfileId());
+        accountingEntries.setProfileId(deposit.getProfileId());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
         accountingEntries.setAmount(depositService.getDailyCharge(deposit));
@@ -139,7 +144,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     public void putMoneyOnCashbox(String amount) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        accountingEntries.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CASHBOX"));
         accountingEntries.setCredit("");
         accountingEntries.setAmount(amount);
@@ -152,7 +157,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void putUserMoneyOnPersonalAccountFromCashBox(String amount) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        accountingEntries.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
         accountingEntries.setDebet("");
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CASHBOX") + " / " + chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT"));
         accountingEntries.setAmount(amount);
@@ -164,7 +169,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     public void withdrawMoney(String amount) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        accountingEntries.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT") + " / " + chartOfAccountsRepository.getAccountNumberByAccountCode("CASHBOX"));
 
         accountingEntries.setCredit("");
@@ -179,7 +184,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void getMoneyFromCashbox(String amount) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        accountingEntries.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
         accountingEntries.setDebet(" ");
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CASHBOX"));
         accountingEntries.setAmount(amount);
@@ -198,7 +203,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void transferFromBankDevFundToPersonalAcc(Credit credit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(credit.getProfileId());
+        accountingEntries.setProfileId(credit.getProfileId());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT"));
         accountingEntries.setAmount(credit.getCreditAmount());
@@ -213,18 +218,55 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     public void chargePaymentsOnCredit(Credit credit) {
         chargeMainDebtOnCredit(credit);
         chargeInterestDebt(credit);
+    }
+
+    @Override
+    public void finishCreditProgram(long creditId) {
+        if(!creditsAccountsService.checkDebt(creditId)){
+            creditsAccountsService.deleteAccountByCreditId(creditId);
+            creditService.deleteById(creditId);
+        }
+    }
+
+    @Override
+    public boolean payCreditDebt(long creditId) {
+        Double commonDebt = creditsAccountsService.getCommonDebt(creditId);
+        if(clientAccountsService.checkBalance(Double.toString(commonDebt))){
+
+            clientAccountsService.getMoneyFromAccount(Double.toString(commonDebt));
+
+            creditsAccountsService.putMoneyOnMasterAccount(creditId, Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getMasterAccountDebt(creditId)))));
+            AccountingEntries accountingEntries1 = new AccountingEntries();
+            accountingEntries1.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+            accountingEntries1.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT"));
+            accountingEntries1.setCredit(" ");
+            accountingEntries1.setAmount(Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getMasterAccountDebt(creditId)))));
+            accountingEntriesRepository.save(accountingEntries1);
+
+            creditsAccountsService.putMoneyOnInterestAccount(creditId, Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getInterestAccountDebt(creditId)))));
+            AccountingEntries accountingEntries2 = new AccountingEntries();
+            accountingEntries2.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+            accountingEntries2.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT"));
+            accountingEntries2.setCredit(" ");
+            accountingEntries2.setAmount(Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getInterestAccountDebt(creditId)))));
+
+            accountingEntriesRepository.save(accountingEntries2);
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
     private void chargeMainDebtOnCredit(Credit credit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(credit.getProfileId());
+        accountingEntries.setProfileId(credit.getProfileId());
         accountingEntries.setDebet(" ");
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
         accountingEntries.setAmount(creditService.getMainDebt(credit));
 
-        creditsAccountsService.getMoneyOnMasterAccount(credit, accountingEntries.getAmount());
+        creditsAccountsService.getMoneyOnMasterAccount(credit.getId(), accountingEntries.getAmount());
         bankDevelopmentFundService.putMoneyOnTheAccount(accountingEntries.getAmount());
 
         accountingEntriesRepository.save(accountingEntries);
@@ -233,12 +275,12 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private void chargeInterestDebt(Credit credit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
-        accountingEntries.setProfile_id(credit.getProfileId());
+        accountingEntries.setProfileId(credit.getProfileId());
         accountingEntries.setDebet(" ");
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
         accountingEntries.setAmount(creditService.getInterestDebt(credit));
 
-        creditsAccountsService.getMoneyOnInterestAccount(credit, accountingEntries.getAmount());
+        creditsAccountsService.getMoneyOnInterestAccount(credit.getId(), accountingEntries.getAmount());
         bankDevelopmentFundService.putMoneyOnTheAccount(accountingEntries.getAmount());
 
         accountingEntriesRepository.save(accountingEntries);

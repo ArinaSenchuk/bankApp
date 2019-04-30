@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountingEntriesRepository extends JpaRepository<AccountingEntries, Long> {
 
+    void deleteAllByProfileId(long profileId);
 }

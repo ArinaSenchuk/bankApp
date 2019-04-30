@@ -2,6 +2,7 @@ package com.senchuk.project.controller;
 
 import com.senchuk.project.model.Credit;
 import com.senchuk.project.model.Deposit;
+import com.senchuk.project.model.dto.CreditDto;
 import com.senchuk.project.service.AccountingEntriesService;
 import com.senchuk.project.service.CreditService;
 import com.senchuk.project.service.CreditsAccountsService;
@@ -32,7 +33,14 @@ public class CreditController {
     }
 
     @GetMapping
-    public List<Credit> getAll() {
+    public List<CreditDto> getAllCreditInformation() {
         return creditService.getAllCreditsOfCurrentUser();
     }
+
+    @PostMapping(value = "/payment")
+    public boolean payDebt(@RequestParam(value = "creditId") long creditId){
+        return accountingEntriesService.payCreditDebt(creditId);
+    }
+
+
 }

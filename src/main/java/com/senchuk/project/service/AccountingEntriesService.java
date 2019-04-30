@@ -21,4 +21,10 @@ public interface AccountingEntriesService {
 
     void chargePaymentsOnCredit(Credit credit);
 
+    void deleteEntriesByProfileId(long profileId);
+
+    void finishCreditProgram(long creditId);
+
+    boolean payCreditDebt(long creditId);
+
 }

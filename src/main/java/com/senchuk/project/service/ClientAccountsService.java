@@ -12,7 +12,9 @@ public interface ClientAccountsService {
     void putMoneyFromAccount(String amount, long profileId);
     void getMoneyFromAccount(String amountm, long profileId);
 
-
-
     ClientAccounts getCurrentClientAccount();
+
+    void deleteAccount(long profileId);
+
+    boolean checkBalance(String amount);
 }

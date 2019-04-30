@@ -22,4 +22,8 @@ public class ProfileController {
         profileService.saveProfileChanges(profile);
     }
 
+    @GetMapping(value = "/delete")
+    public boolean deleteProfile() {
+        return profileService.deleteProfile();
+    }
 }

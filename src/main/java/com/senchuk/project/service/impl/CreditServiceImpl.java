@@ -1,9 +1,12 @@
 package com.senchuk.project.service.impl;
 
 import com.senchuk.project.model.Credit;
+import com.senchuk.project.model.CreditsAccounts;
+import com.senchuk.project.model.dto.CreditDto;
 import com.senchuk.project.repository.CreditRepository;
 import com.senchuk.project.repository.UserRepository;
 import com.senchuk.project.service.CreditService;
+import com.senchuk.project.service.CreditsAccountsService;
 import com.senchuk.project.service.InterestProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,6 +23,8 @@ public class CreditServiceImpl implements CreditService {
 
     @Autowired
     private CreditRepository creditRepository;
+    @Autowired
+    private CreditsAccountsService creditsAccountsService;
     @Autowired
     private InterestProgramService interestProgramService;
     @Autowired
@@ -40,8 +46,31 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public List<Credit> getAllCreditsOfCurrentUser() {
-        return creditRepository.findAllByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+    public List<Credit> getAllCreditsByProfileId(long profileId) {
+        return creditRepository.findAllByProfileId(profileId);
+    }
+
+    @Override
+    public ArrayList<CreditDto> getAllCreditsOfCurrentUser() {
+
+        ArrayList<CreditDto> listDto = new ArrayList<>();
+
+        List<Credit> credits =  creditRepository.findAllByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        for (int i = 0; i < credits.size(); i++){
+            CreditDto creditDto = new CreditDto();
+            creditDto.setCreditId(credits.get(i).getId());
+            creditDto.setNumberOfContract(credits.get(i).getNumberOfContract());
+            creditDto.setCreditType(credits.get(i).getCreditType().getLabel());
+            creditDto.setCurrencyType(credits.get(i).getCurrencyType().getLabel());
+            creditDto.setDateOfCreditStart(credits.get(i).getDateOfCreditStart());
+            creditDto.setDateOfCreditEnd(credits.get(i).getDateOfCreditEnd());
+            creditDto.setCreditAmount(credits.get(i).getCreditAmount());
+            creditDto.setCommonDebt(creditsAccountsService.getCommonDebt(credits.get(i).getId()));
+            
+            listDto.add(creditDto);
+        }
+
+        return listDto;
     }
 
     @Override
@@ -73,6 +102,11 @@ public class CreditServiceImpl implements CreditService {
 
             return Double.toString(interestDebt);
         }
+    }
+
+    @Override
+    public void deleteById(long creditId) {
+        creditRepository.deleteById(creditId);
     }
 }
 

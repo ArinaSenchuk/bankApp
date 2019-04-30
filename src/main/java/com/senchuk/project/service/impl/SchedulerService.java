@@ -31,7 +31,7 @@ public class SchedulerService {
     private CreditService creditService;
 
     @Scheduled(cron = "0 14 00 * * ?")
-    public void startAndFinishDepositsProgram() {  //Start in day of start:) and end at the end day
+    public void startDepositsProgram() {  //Start in day of start:) and end at the end day
 
         List<Deposit> allDeposits = depositService.getDeposits();
 
@@ -40,9 +40,6 @@ public class SchedulerService {
                 LocalDate currentDate = LocalDate.now();
                 if(currentDate.equals(deposit.getDateOfDepositStart())){
                     accountingEntriesService.startDepositProgram(deposit);
-                }
-                if (currentDate.equals(deposit.getDateOfDepositEnd())){
-                    accountingEntriesService.endDepositProgram(deposit);
                 }
 
             }
@@ -57,15 +54,19 @@ public class SchedulerService {
 
         if(!allDeposits.isEmpty()) {
                 for (Deposit deposit: allDeposits) {
-                    if (currentDate.isAfter(deposit.getDateOfDepositStart()) || currentDate.equals(deposit.getDateOfDepositStart())) {
+                    if (currentDate.isAfter(deposit.getDateOfDepositStart()) & !currentDate.equals(deposit.getDateOfDepositStart())) {
                     accountingEntriesService.chargeInterestOnDeposits(deposit);
                 }
+                    //  ЗАКРЫТИЕ ДЕПОЗИТА
+                    if(currentDate.equals(deposit.getDateOfDepositEnd())) {
+                        accountingEntriesService.endDepositProgram(deposit);
+                    }
             }
         }
     }
 
     @Scheduled(cron = "0 56 16 * * ?")
-    public void startAndFinishCreditProgram() {
+    public void startCreditProgram() {
         List<Credit> allCredits = creditService.getAllCredits();
 
         LocalDate currentDate = LocalDate.now();
@@ -75,13 +76,27 @@ public class SchedulerService {
                 if (currentDate.equals(credit.getDateOfCreditStart())) {
                     accountingEntriesService.startCreditProgram(credit);
                 }
-                if (currentDate.equals(credit.getDateOfCreditEnd())) {
-                    //END CREDIT
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 56 16 * * ?")
+    public void finishCreditProgram() {
+        List<Credit> allCredits = creditService.getAllCredits();
+
+        LocalDate currentDate = LocalDate.now();
+
+        if(!allCredits.isEmpty()) {
+            for (Credit credit: allCredits) {
+                if (currentDate.equals(credit.getDateOfCreditEnd()) ||
+                currentDate.isAfter(credit.getDateOfCreditEnd())) {
+                    accountingEntriesService.finishCreditProgram(credit.getId());
                 }
             }
         }
 
     }
+
 
     @Scheduled(cron = "0 18 17 * * ?")
     public void chargeInterestOnCredits() {

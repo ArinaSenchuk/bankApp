@@ -35,8 +35,8 @@ public class CreditsAccountsServiceImpl implements CreditsAccountsService {
     }
 
     @Override
-    public void putMoneyOnMasterAccount(Credit credit, String amount) {
-        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(credit.getId());
+    public void putMoneyOnMasterAccount(long creditId, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(creditId);
 
         double balance = Double.parseDouble(creditsAccounts.getMasterAccountBalance());
 
@@ -46,8 +46,19 @@ public class CreditsAccountsServiceImpl implements CreditsAccountsService {
     }
 
     @Override
-    public void getMoneyOnMasterAccount(Credit credit, String amount) {
-        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(credit.getId());
+    public void putMoneyOnInterestAccount(long creditId, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(creditId);
+
+        double balance = Double.parseDouble(creditsAccounts.getInterestAccountBalance());
+
+        creditsAccounts.setInterestAccountBalance(Double.toString(balance + Double.parseDouble(amount)));
+
+        creditsAccountsRepository.save(creditsAccounts);
+    }
+
+    @Override
+    public void getMoneyOnMasterAccount(long creditId, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(creditId);
 
         double balance = Double.parseDouble(creditsAccounts.getMasterAccountBalance());
 
@@ -57,14 +68,47 @@ public class CreditsAccountsServiceImpl implements CreditsAccountsService {
     }
 
     @Override
-    public void getMoneyOnInterestAccount(Credit credit, String amount) {
-        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(credit.getId());
+    public void getMoneyOnInterestAccount(long creditId, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(creditId);
 
         double balance = Double.parseDouble(creditsAccounts.getInterestAccountBalance());
 
         creditsAccounts.setInterestAccountBalance(Double.toString(balance - Double.parseDouble(amount)));
 
         creditsAccountsRepository.save(creditsAccounts);
+    }
+
+    @Override
+    public Double getCommonDebt(long creditId) {
+
+        double masterDebt = Double.parseDouble(creditsAccountsRepository.getMasterAccountBalanceByCreditId(creditId));
+        double interestDebt = Double.parseDouble(creditsAccountsRepository.getInterestAccountBalanceByCreditId(creditId));
+
+        return masterDebt + interestDebt;
+
+
+    }
+
+    @Override
+    public boolean checkDebt(long creditId) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(creditId);
+        double commonBalance = Double.parseDouble(creditsAccounts.getMasterAccountBalance()) + Double.parseDouble(creditsAccounts.getInterestAccountBalance());
+        return commonBalance < 0;
+    }
+
+    @Override
+    public void deleteAccountByCreditId(long creditId) {
+        creditsAccountsRepository.deleteByCreditId(creditId);
+    }
+
+    @Override
+    public String getMasterAccountDebt(long creditId) {
+        return creditsAccountsRepository.getMasterAccountBalanceByCreditId(creditId);
+    }
+
+    @Override
+    public String getInterestAccountDebt(long creditId) {
+        return creditsAccountsRepository.getInterestAccountBalanceByCreditId(creditId);
     }
 
     private int generateNum() {

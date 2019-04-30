@@ -28,8 +28,13 @@ public class ClientAccountsController {
         clientAccountsService.putMoneyFromAccount(amount);
     }
     @PostMapping(value = "/get")
-    public void getMoneyFromAccount(@RequestBody String amount) {
-        accountingEntriesService.withdrawMoney(amount);
-        clientAccountsService.getMoneyFromAccount(amount);
+    public boolean getMoneyFromAccount(@RequestBody String amount) {
+        if(clientAccountsService.checkBalance(amount)) {
+            accountingEntriesService.withdrawMoney(amount);
+            clientAccountsService.getMoneyFromAccount(amount);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

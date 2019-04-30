@@ -8,6 +8,7 @@ import com.senchuk.project.service.ClientAccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Random;
 
 @Service(value="clientAccountsService")
@@ -66,8 +67,18 @@ public class ClientAccountsServiceImpl implements ClientAccountsService {
         return clientAccountsRepository.findByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
     }
 
+    @Override
+    @Transactional
+    public void deleteAccount(long profileId) {
+        clientAccountsRepository.deleteByProfileId(profileId);
+    }
 
-
+    @Override
+    public boolean checkBalance(String amount) {
+        ClientAccounts clientAccount = clientAccountsRepository.findByProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
+        double balance = Double.parseDouble(clientAccount.getAccountBalance());
+        return balance >= Double.parseDouble(amount);
+    }
 
 
     private int generateNum() {
