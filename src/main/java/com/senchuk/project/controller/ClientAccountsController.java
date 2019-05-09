@@ -1,6 +1,5 @@
 package com.senchuk.project.controller;
 
-import com.senchuk.project.model.AccountingEntries;
 import com.senchuk.project.model.ClientAccounts;
 import com.senchuk.project.service.AccountingEntriesService;
 import com.senchuk.project.service.ClientAccountsService;

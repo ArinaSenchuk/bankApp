@@ -1,6 +1,5 @@
 package com.senchuk.project.model.dto;
 
-import com.senchuk.project.model.ReferenceData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
