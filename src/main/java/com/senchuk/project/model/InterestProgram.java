@@ -22,9 +22,10 @@ public class InterestProgram {
     private long id;
 
 
-    private long programId;
-
-    private long termId;
+    @ManyToOne
+    private ReferenceData program;
+    @ManyToOne
+    private ReferenceData term;
 
     private String interest;
 }

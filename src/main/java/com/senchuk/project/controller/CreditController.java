@@ -1,7 +1,6 @@
 package com.senchuk.project.controller;
 
 import com.senchuk.project.model.Credit;
-import com.senchuk.project.model.Deposit;
 import com.senchuk.project.model.dto.CreditDto;
 import com.senchuk.project.service.AccountingEntriesService;
 import com.senchuk.project.service.CreditService;
