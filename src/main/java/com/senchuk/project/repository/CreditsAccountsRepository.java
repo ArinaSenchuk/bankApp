@@ -12,4 +12,5 @@ public interface CreditsAccountsRepository extends JpaRepository<CreditsAccounts
     @Query("select account.masterAccountBalance from CreditsAccounts as account where account.profileId=:id")
     String getBalanceOfClientAccount(@Param("id") long profileId);
 
+    CreditsAccounts findByCreditId(long creditId);
 }

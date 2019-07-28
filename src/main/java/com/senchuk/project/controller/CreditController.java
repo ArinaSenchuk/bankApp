@@ -6,10 +6,9 @@ import com.senchuk.project.service.AccountingEntriesService;
 import com.senchuk.project.service.CreditService;
 import com.senchuk.project.service.CreditsAccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -30,7 +29,10 @@ public class CreditController {
 
         creditService.save(credit);
         creditsAccountsService.createCreditAccounts(credit);
+    }
 
-        //accountingEntriesService.startDepositProgram(deposit);
+    @GetMapping
+    public List<Credit> getAll() {
+        return creditService.getAllCreditsOfCurrentUser();
     }
 }

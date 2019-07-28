@@ -1,10 +1,8 @@
 package com.senchuk.project.service.impl;
 
+import com.senchuk.project.model.Credit;
 import com.senchuk.project.model.Deposit;
-import com.senchuk.project.service.AccountingEntriesService;
-import com.senchuk.project.service.BankDevelopmentFundService;
-import com.senchuk.project.service.DepositService;
-import com.senchuk.project.service.DepositsAccountsService;
+import com.senchuk.project.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 
@@ -28,9 +27,11 @@ public class SchedulerService {
     private AccountingEntriesService accountingEntriesService;
     @Autowired
     private DepositsAccountsService depositsAccountsService;
+    @Autowired
+    private CreditService creditService;
 
     @Scheduled(cron = "0 14 00 * * ?")
-    public void startEndDepositsProgram() {  //Start in day of start:) and end at the end day
+    public void startAndFinishDepositsProgram() {  //Start in day of start:) and end at the end day
 
         List<Deposit> allDeposits = depositService.getDeposits();
 
@@ -48,7 +49,6 @@ public class SchedulerService {
         }
     }
 
-
     @Scheduled(cron = "0 50 23 * * ?")
     public void chargeInterestOnDeposits() {
         List<Deposit> allDeposits = depositService.getDeposits();
@@ -58,14 +58,56 @@ public class SchedulerService {
         if(!allDeposits.isEmpty()) {
                 for (Deposit deposit: allDeposits) {
                     if (currentDate.isAfter(deposit.getDateOfDepositStart()) || currentDate.equals(deposit.getDateOfDepositStart())) {
-                    bankDevelopmentFundService.getMoneyFromTheAccount(depositService.getDailyCharge(deposit));
-                    accountingEntriesService.chargeInterestOnDeposits(deposit, depositService.getDailyCharge(deposit));
-                    depositsAccountsService.putInterest(deposit.getId(), depositService.getDailyCharge(deposit));
+                    accountingEntriesService.chargeInterestOnDeposits(deposit);
                 }
             }
+        }
+    }
 
+    @Scheduled(cron = "0 56 16 * * ?")
+    public void startAndFinishCreditProgram() {
+        List<Credit> allCredits = creditService.getAllCredits();
+
+        LocalDate currentDate = LocalDate.now();
+
+        if(!allCredits.isEmpty()) {
+            for (Credit credit: allCredits) {
+                if (currentDate.equals(credit.getDateOfCreditStart())) {
+                    accountingEntriesService.startCreditProgram(credit);
+                }
+                if (currentDate.equals(credit.getDateOfCreditEnd())) {
+                    //END CREDIT
+                }
+            }
         }
 
-
     }
+
+    @Scheduled(cron = "0 18 17 * * ?")
+    public void chargeInterestOnCredits() {
+        List<Credit> allCredits = creditService.getAllCredits();
+
+        LocalDate currentDate = LocalDate.now();
+
+        YearMonth daysInTheMonth = YearMonth.of(currentDate.getYear(), currentDate.getMonth());
+        int days = daysInTheMonth.lengthOfMonth();
+
+        if(!allCredits.isEmpty()) {
+            for (Credit credit: allCredits) {
+                if (currentDate != credit.getDateOfCreditStart()) {
+                    if (currentDate.getDayOfMonth() == credit.getDateOfCreditStart().getDayOfMonth()) {
+
+                        accountingEntriesService.chargePaymentsOnCredit(credit);
+
+                    } else if (currentDate.getDayOfMonth() == days &
+                            credit.getDateOfCreditStart().getDayOfMonth() > days) {
+
+                        accountingEntriesService.chargePaymentsOnCredit(credit);
+                    }
+
+                }
+            }
+        }
+    }
+
 }

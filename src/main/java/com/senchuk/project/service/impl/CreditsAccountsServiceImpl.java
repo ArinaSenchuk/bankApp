@@ -28,13 +28,44 @@ public class CreditsAccountsServiceImpl implements CreditsAccountsService {
         creditsAccounts.setMasterAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT") + generateNum());
         creditsAccounts.setInterestAccountNumber(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT") + generateNum());
 
-        creditsAccounts.setMasterAccountBalance(credit.getCreditAmount());
+        creditsAccounts.setMasterAccountBalance("0");
         creditsAccounts.setInterestAccountBalance("0");
 
         creditsAccountsRepository.save(creditsAccounts);
     }
 
+    @Override
+    public void putMoneyOnMasterAccount(Credit credit, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(credit.getId());
 
+        double balance = Double.parseDouble(creditsAccounts.getMasterAccountBalance());
+
+        creditsAccounts.setMasterAccountBalance(Double.toString(balance + Double.parseDouble(amount)));
+
+       creditsAccountsRepository.save(creditsAccounts);
+    }
+
+    @Override
+    public void getMoneyOnMasterAccount(Credit credit, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(credit.getId());
+
+        double balance = Double.parseDouble(creditsAccounts.getMasterAccountBalance());
+
+        creditsAccounts.setMasterAccountBalance(Double.toString(balance - Double.parseDouble(amount)));
+
+        creditsAccountsRepository.save(creditsAccounts);
+    }
+
+    @Override
+    public void getMoneyOnInterestAccount(Credit credit, String amount) {
+        CreditsAccounts creditsAccounts = creditsAccountsRepository.findByCreditId(credit.getId());
+
+        double balance = Double.parseDouble(creditsAccounts.getInterestAccountBalance());
+
+        creditsAccounts.setInterestAccountBalance(Double.toString(balance - Double.parseDouble(amount)));
+
+        creditsAccountsRepository.save(creditsAccounts);
+    }
 
     private int generateNum() {
         Random random = new Random();

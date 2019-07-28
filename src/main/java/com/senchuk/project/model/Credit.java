@@ -37,6 +37,4 @@ public class Credit {
     private ReferenceData creditTerm;
     private String creditAmount;
 
-    private String monthlyCharge;
-
 }

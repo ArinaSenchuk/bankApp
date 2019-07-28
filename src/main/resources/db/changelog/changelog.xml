@@ -755,10 +755,6 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="monthly_charge" type="varchar(55)">
-                <constraints nullable="true"/>
-            </column>
-
         </createTable>
         <addAutoIncrement tableName="credits" columnName="id" columnDataType="bigint"/>
 

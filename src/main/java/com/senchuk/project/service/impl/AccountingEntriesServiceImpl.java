@@ -1,6 +1,7 @@
 package com.senchuk.project.service.impl;
 
 import com.senchuk.project.model.AccountingEntries;
+import com.senchuk.project.model.Credit;
 import com.senchuk.project.model.Deposit;
 import com.senchuk.project.repository.AccountingEntriesRepository;
 import com.senchuk.project.repository.ChartOfAccountsRepository;
@@ -9,7 +10,7 @@ import com.senchuk.project.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service(value = "depositsEntryService")
+@Service(value = "accountingEntryService")
 public class AccountingEntriesServiceImpl implements AccountingEntriesService {
 
     @Autowired
@@ -24,6 +25,10 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     private DepositsAccountsService depositsAccountsService;
     @Autowired
     private DepositService depositService;
+    @Autowired
+    private CreditsAccountsService creditsAccountsService;
+    @Autowired
+    private CreditService creditService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -43,6 +48,7 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
         depositsAccountsService.deleteDepositAccount(deposit.getId());
         depositService.deleteDeposit(deposit.getId());
     }
+
 
     @Override
     public void transferFromPersonalAccToDepositAcc(Deposit deposit) {
@@ -115,13 +121,16 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
     }
 
     @Override
-    public void chargeInterestOnDeposits(Deposit deposit, String interestAmount) {
+    public void chargeInterestOnDeposits(Deposit deposit) {
         AccountingEntries accountingEntries = new AccountingEntries();
 
         accountingEntries.setProfile_id(deposit.getProfileId());
         accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
         accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_ACCOUNT_FOR_" + deposit.getDepositType().getCode()));
-        accountingEntries.setAmount(interestAmount);
+        accountingEntries.setAmount(depositService.getDailyCharge(deposit));
+
+        bankDevelopmentFundService.getMoneyFromTheAccount(depositService.getDailyCharge(deposit));
+        depositsAccountsService.putInterest(deposit.getId(), depositService.getDailyCharge(deposit));
 
         accountingEntriesRepository.save(accountingEntries);
     }
@@ -177,4 +186,62 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
 
         accountingEntriesRepository.save(accountingEntries);
     }
+
+
+//- - - - - - - - - - - - - - - C R E D I T - - - - - - - - - - - -
+
+    @Override
+    public void startCreditProgram(Credit credit) {
+        transferFromBankDevFundToPersonalAcc(credit);
+    }
+
+    private void transferFromBankDevFundToPersonalAcc(Credit credit) {
+        AccountingEntries accountingEntries = new AccountingEntries();
+
+        accountingEntries.setProfile_id(credit.getProfileId());
+        accountingEntries.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
+        accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT"));
+        accountingEntries.setAmount(credit.getCreditAmount());
+
+        bankDevelopmentFundService.getMoneyFromTheAccount(credit.getCreditAmount());
+        clientAccountsService.putMoneyFromAccount(credit.getCreditAmount(), credit.getProfileId());
+
+        accountingEntriesRepository.save(accountingEntries);
+    }
+
+    @Override
+    public void chargePaymentsOnCredit(Credit credit) {
+        chargeMainDebtOnCredit(credit);
+        chargeInterestDebt(credit);
+
+    }
+
+    private void chargeMainDebtOnCredit(Credit credit) {
+        AccountingEntries accountingEntries = new AccountingEntries();
+
+        accountingEntries.setProfile_id(credit.getProfileId());
+        accountingEntries.setDebet(" ");
+        accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
+        accountingEntries.setAmount(creditService.getMainDebt(credit));
+
+        creditsAccountsService.getMoneyOnMasterAccount(credit, accountingEntries.getAmount());
+        bankDevelopmentFundService.putMoneyOnTheAccount(accountingEntries.getAmount());
+
+        accountingEntriesRepository.save(accountingEntries);
+    }
+
+    private void chargeInterestDebt(Credit credit) {
+        AccountingEntries accountingEntries = new AccountingEntries();
+
+        accountingEntries.setProfile_id(credit.getProfileId());
+        accountingEntries.setDebet(" ");
+        accountingEntries.setCredit(chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("BANK_DEVELOPMENT_FUND_ACCOUNT"));
+        accountingEntries.setAmount(creditService.getInterestDebt(credit));
+
+        creditsAccountsService.getMoneyOnInterestAccount(credit, accountingEntries.getAmount());
+        bankDevelopmentFundService.putMoneyOnTheAccount(accountingEntries.getAmount());
+
+        accountingEntriesRepository.save(accountingEntries);
+    }
+
 }
