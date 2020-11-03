@@ -233,9 +233,8 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
         Double commonDebt = creditsAccountsService.getCommonDebt(creditId);
         if(clientAccountsService.checkBalance(Double.toString(commonDebt))){
 
-            clientAccountsService.getMoneyFromAccount(Double.toString(commonDebt));
+            clientAccountsService.getMoneyFromAccount(Double.toString(Math.abs(commonDebt)));
 
-            creditsAccountsService.putMoneyOnMasterAccount(creditId, Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getMasterAccountDebt(creditId)))));
             AccountingEntries accountingEntries1 = new AccountingEntries();
             accountingEntries1.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
             accountingEntries1.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("CREDIT_ACCOUNT"));
@@ -243,7 +242,8 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
             accountingEntries1.setAmount(Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getMasterAccountDebt(creditId)))));
             accountingEntriesRepository.save(accountingEntries1);
 
-            creditsAccountsService.putMoneyOnInterestAccount(creditId, Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getInterestAccountDebt(creditId)))));
+            creditsAccountsService.putMoneyOnMasterAccount(creditId, Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getMasterAccountDebt(creditId)))));
+
             AccountingEntries accountingEntries2 = new AccountingEntries();
             accountingEntries2.setProfileId(userRepository.getProfileIdByLogin(securityHelper.getCurrentUsername()));
             accountingEntries2.setDebet(chartOfAccountsRepository.getAccountNumberByAccountCode("CURRENT_ACCOUNT") + "/" + chartOfAccountsRepository.getAccountNumberByAccountCode("INTEREST_CREDIT_ACCOUNT"));
@@ -251,6 +251,8 @@ public class AccountingEntriesServiceImpl implements AccountingEntriesService {
             accountingEntries2.setAmount(Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getInterestAccountDebt(creditId)))));
 
             accountingEntriesRepository.save(accountingEntries2);
+
+            creditsAccountsService.putMoneyOnInterestAccount(creditId, Double.toString(Math.abs(Double.parseDouble(creditsAccountsService.getInterestAccountDebt(creditId)))));
             return true;
         } else {
             return false;

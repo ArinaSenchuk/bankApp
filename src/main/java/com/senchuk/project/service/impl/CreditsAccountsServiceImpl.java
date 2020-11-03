@@ -8,6 +8,7 @@ import com.senchuk.project.service.CreditsAccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Random;
 
 @Service(value = "creditsAccountsService")
@@ -97,6 +98,7 @@ public class CreditsAccountsServiceImpl implements CreditsAccountsService {
     }
 
     @Override
+    @Transactional
     public void deleteAccountByCreditId(long creditId) {
         creditsAccountsRepository.deleteByCreditId(creditId);
     }

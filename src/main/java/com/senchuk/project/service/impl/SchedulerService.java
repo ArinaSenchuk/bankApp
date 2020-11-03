@@ -30,8 +30,8 @@ public class SchedulerService {
     @Autowired
     private CreditService creditService;
 
-    @Scheduled(cron = "0 14 00 * * ?")
-    public void startDepositsProgram() {  //Start in day of start:) and end at the end day
+    @Scheduled(cron = "0 11 16 * * ?")
+    public void startDepositsProgram() {
 
         List<Deposit> allDeposits = depositService.getDeposits();
 
@@ -46,7 +46,7 @@ public class SchedulerService {
         }
     }
 
-    @Scheduled(cron = "0 50 23 * * ?")
+    @Scheduled(cron = "0 13 16 * * ?")
     public void chargeInterestOnDeposits() {
         List<Deposit> allDeposits = depositService.getDeposits();
 
@@ -65,7 +65,7 @@ public class SchedulerService {
         }
     }
 
-    @Scheduled(cron = "0 56 16 * * ?")
+    @Scheduled(cron = "0 17 16 * * ?")
     public void startCreditProgram() {
         List<Credit> allCredits = creditService.getAllCredits();
 
@@ -80,7 +80,7 @@ public class SchedulerService {
         }
     }
 
-    @Scheduled(cron = "0 56 16 * * ?")
+    @Scheduled(cron = "0 34 16 * * ?")
     public void finishCreditProgram() {
         List<Credit> allCredits = creditService.getAllCredits();
 
@@ -98,7 +98,7 @@ public class SchedulerService {
     }
 
 
-    @Scheduled(cron = "0 18 17 * * ?")
+    @Scheduled(cron = "0 27 16 * * ?")
     public void chargeInterestOnCredits() {
         List<Credit> allCredits = creditService.getAllCredits();
 
